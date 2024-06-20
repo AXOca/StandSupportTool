@@ -13,6 +13,10 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 
 ## Changelog
 
+### Version 0.5 06-21-24
+- Refactored AV Checker
+- Some improvements and bugfixes
+
 ### Version 0.4 06-20-24
 Thanks to [Alessandro](https://github.com/alessandromrc):
 - Added Hotkey Manager
