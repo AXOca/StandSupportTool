@@ -28,7 +28,7 @@ namespace StandSupportTool
             InitializeUpdateManager();
 
             // Check for updates asynchronously
-            _ = CheckForUpdatesAsync();
+            this.Loaded += async (s, e) => await CheckForUpdatesAsync();
         }
 
         // Initialize the activation key text box
@@ -100,7 +100,10 @@ namespace StandSupportTool
         // Event handlers
         private void FullReset_Click(object sender, RoutedEventArgs e) => resetManager.FullReset();
 
-        private void ClearCache_Click(object sender, RoutedEventArgs e) => cacheManager.ClearCache();
+        private async void ClearCache_Click(object sender, RoutedEventArgs e)
+        {
+            await cacheManager.ClearCache();
+        }
 
         private void SwitchProtocol_Click(object sender, RoutedEventArgs e)
         {
