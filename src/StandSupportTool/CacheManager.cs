@@ -1,32 +1,62 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace StandSupportTool
 {
     public class CacheManager
     {
-        public void ClearCache()
+        // Define cache directory paths
+        private static readonly string StandCacheDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand/Cache");
+        private static readonly string StandBinDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand/Bin");
+        private static readonly string LaunchpadCache1 = Path.Combine(Environment.GetEnvironmentVariable("ProgramData") ?? string.Empty, "Calamity, Inc");
+        private static readonly string LaunchpadCache2 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Calamity,_Inc");
+
+        public async Task ClearCache()
         {
+            string resultMessage = string.Empty;
+
             try
             {
-                // Define cache directory path
-                string cacheDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand/Cache");
+                // Attempt to delete the Stand/Cache directory
+                resultMessage += $"Stand-Cache: {await DeleteDirectoryAsync(StandCacheDir)}\n";
+                // Attempt to delete the Stand/Bin directory
+                resultMessage += $"Stand-Bin: {await DeleteDirectoryAsync(StandBinDir)}\n";
+                // Attempt to delete the first launchpad directory
+                resultMessage += $"Launchpad-Cache1: {await DeleteDirectoryAsync(LaunchpadCache1)}\n";
+                // Attempt to delete the second launchpad directory
+                resultMessage += $"Launchpad-Cache2: {await DeleteDirectoryAsync(LaunchpadCache2)}\n";
 
-                if (Directory.Exists(cacheDir))
-                {
-                    Directory.Delete(cacheDir, true);
-                    MessageBox.Show("All Cache data has been deleted.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Cache directory does not exist.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                MessageBox.Show(resultMessage, "Result", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to delete Cache data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Failed to delete specified directories: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private async Task<string> DeleteDirectoryAsync(string path)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    if (Directory.Exists(path))
+                    {
+                        Directory.Delete(path, true);
+                        return "Deleted";
+                    }
+                    else
+                    {
+                        return "Does not exist";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return $"Error: {ex.Message}";
+                }
+            });
         }
     }
 }
