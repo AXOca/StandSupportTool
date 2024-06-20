@@ -1,76 +1,74 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace StandSupportTool
 {
     public static class LaunchpadManager
     {
-        public static void PerformTest()
-        {
-            // Prompt user for confirmation
-            MessageBoxResult result = MessageBox.Show(
-                "This feature will download Stand's Launchpad into a new folder on your desktop and exclude it automatically from Windows Defender.\n\nFor this, we need admin permissions.\n\nDo you want to continue?",
-                "Confirmation",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+        private const string ZipUrl = "https://github.com/AXOca/StandSupportTool/raw/main/resources/launchpad.zip";
+        private const string ConfirmationMessage = "This feature will download Stand's Launchpad into a new folder on your desktop and exclude it automatically from Windows Defender.\n\nFor this, we need admin permissions.\n\nDo you want to continue?";
+        private const string SuccessMessage = "Done.\n\nLook at your Desktop, go into the \"Stand_Launchpad\" folder and unpack it.\n\nThe password is: stand.gg";
+        private const string ErrorMessage = "Operation cancelled or failed due to insufficient permissions.";
 
-            // Exit method if user selects 'No'
-            if (result != MessageBoxResult.Yes)
+        public static async Task PerformTest()
+        {
+            if (!ConfirmUserPermission())
             {
                 return;
             }
 
-            // Define paths
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string folderPath = Path.Combine(desktopPath, "Stand_Launchpad");
+            string folderPath = CreateDesktopFolder("Stand_Launchpad");
 
-            // Create folder on desktop
-            Directory.CreateDirectory(folderPath);
-
-            // Add exclusion for the newly created folder
             AddExclusion(folderPath);
 
-            // Download the zip file into the folder
-            string zipUrl = "https://github.com/AXOca/Stand-Tools/raw/main/StandSupportTool-cs/resources/launchpad.zip"; // Replace with actual URL
-            string zipPath = Path.Combine(folderPath, "launchpad.zip");
+            await DownloadLaunchpadAsync(folderPath);
 
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(zipUrl, zipPath);
-            }
+            InformUserOfSuccess();
+        }
 
-            // Inform the user about the success
-            MessageBox.Show("Done.\n\nLook at your Desktop, go into the \"Stand_Launchpad\" folder and unpack it.\n\nThe password is: stand.gg", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        private static bool ConfirmUserPermission()
+        {
+            MessageBoxResult result = MessageBox.Show(
+                ConfirmationMessage,
+                "Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            return result == MessageBoxResult.Yes;
+        }
+
+        private static string CreateDesktopFolder(string folderName)
+        {
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string folderPath = Path.Combine(desktopPath, folderName);
+            Directory.CreateDirectory(folderPath);
+            return folderPath;
         }
 
         private static void AddExclusion(string folderPath)
         {
-            // PowerShell script to add an exclusion
             string script = $"-Command Add-MpPreference -ExclusionPath '{folderPath}'";
-
-            // Execute the script with admin privileges
             ExecuteCommandAsAdmin(script);
         }
 
         private static void ExecuteCommandAsAdmin(string script)
         {
-            // Set up the command line arguments for the PowerShell script
             string cmdArguments = $"/C powershell {script}";
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
                 Arguments = cmdArguments,
-                Verb = "runas", // Request admin privileges
+                Verb = "runas",
                 UseShellExecute = true,
                 CreateNoWindow = true
             };
 
             try
             {
-                // Start the process and wait for it to exit
                 using (Process process = new Process { StartInfo = startInfo })
                 {
                     process.Start();
@@ -79,9 +77,32 @@ namespace StandSupportTool
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                // Handle case where the user cancels the UAC prompt
-                MessageBox.Show("Operation cancelled or failed due to insufficient permissions.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ErrorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private static async Task DownloadLaunchpadAsync(string folderPath)
+        {
+            string zipPath = Path.Combine(folderPath, "launchpad.zip");
+            await DownloadFileAsync(ZipUrl, zipPath);
+        }
+
+        private static async Task DownloadFileAsync(string url, string destinationPath)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                await using (var fs = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    await response.Content.CopyToAsync(fs);
+                }
+            }
+        }
+
+        private static void InformUserOfSuccess()
+        {
+            MessageBox.Show(SuccessMessage, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

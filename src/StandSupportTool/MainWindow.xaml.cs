@@ -138,7 +138,10 @@ namespace StandSupportTool
 
         private void AddStandToExclusionsV2_Click(object sender, RoutedEventArgs e) => PowerShellExecutor.ExecuteAddMpPreference();
 
-        private void Launchpad_Click(object sender, RoutedEventArgs e) => LaunchpadManager.PerformTest();
+        private async void Launchpad_Click(object sender, RoutedEventArgs e)
+        {
+            await LaunchpadManager.PerformTest();
+        }
 
         private void DisplayAntivirusInfo_Click(object sender, RoutedEventArgs e)
         {
