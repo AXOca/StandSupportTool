@@ -8,7 +8,7 @@ namespace StandSupportTool
 {
     internal class ProtocolManager
     {
-        private string choosenProtocol;
+        private string? choosenProtocol;
 
         public ProtocolManager()
         {
@@ -53,7 +53,7 @@ namespace StandSupportTool
         }
 
         // Get the chosen protocol
-        public string getProtocol()
+        public string? getProtocol()
         {
             return choosenProtocol;
         }
