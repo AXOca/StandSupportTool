@@ -7,12 +7,18 @@ using System.Windows;
 
 namespace StandSupportTool
 {
-    public class UpdateManager(string currentVersion, string executablePath)
+    public class UpdateManager
     {
-        private const string VersionUrl = "https://raw.githubusercontent.com/AXOca/Stand-Tools/main/StandSupportTool-cs/version.txt";
-        private const string DownloadUrl = "https://raw.githubusercontent.com/AXOca/Stand-Tools/main/StandSupportTool-cs/latest_build/StandSupportTool.exe";
-        private readonly string currentVersion = currentVersion;
-        private readonly string executablePath = executablePath;
+        private const string VersionUrl = "https://github.com/AXOca/StandSupportTool/raw/main/version.txt";
+        private const string DownloadUrl = "https://github.com/AXOca/StandSupportTool/raw/main/latest_build/StandSupportTool.exe";
+        private readonly string currentVersion;
+        private readonly string executablePath;
+
+        public UpdateManager(string currentVersion, string executablePath)
+        {
+            this.currentVersion = currentVersion;
+            this.executablePath = executablePath;
+        }
 
         public async Task<bool> CheckForUpdates()
         {
@@ -76,7 +82,7 @@ namespace StandSupportTool
 
                     MessageBox.Show($"Update downloaded to: {tempFilePath}", "Update Info", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    File.AppendAllText(Path.Combine(Path.GetTempPath(), "update_log.txt"), $"{DateTime.Now}: Update process initiated. Temp file path: {tempFilePath}\n");
+                    LogUpdateProcess(tempFilePath, "Update process initiated.");
 
                     Application.Current.Shutdown();
                 }
@@ -84,7 +90,7 @@ namespace StandSupportTool
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to download update: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                File.AppendAllText(Path.Combine(Path.GetTempPath(), "update_log.txt"), $"{DateTime.Now}: Error - {ex.Message}\n");
+                LogUpdateProcess(null, $"Error - {ex.Message}");
             }
         }
 
@@ -93,6 +99,17 @@ namespace StandSupportTool
             Version v1 = new Version(latestVersion);
             Version v2 = new Version(currentVersion);
             return v1 > v2;
+        }
+
+        private void LogUpdateProcess(string? tempFilePath, string message)
+        {
+            string logMessage = $"{DateTime.Now}: {message}";
+            if (!string.IsNullOrEmpty(tempFilePath))
+            {
+                logMessage += $" Temp file path: {tempFilePath}";
+            }
+
+            File.AppendAllText(Path.Combine(Path.GetTempPath(), "update_log.txt"), logMessage + Environment.NewLine);
         }
     }
 }
