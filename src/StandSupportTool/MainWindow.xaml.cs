@@ -17,7 +17,6 @@ namespace StandSupportTool
         private static readonly HotkeyManager hotkeyManager = new HotkeyManager();
         private static readonly ClearHotkeysManager clearHotkeysManager = new ClearHotkeysManager();
         private static UpdateManager? updateManager; // Declare as nullable
-        private static readonly AntivirusInfo antivirusInfo = new AntivirusInfo();
         private static readonly DashboardLinkOpener dashboardLinkOpener = new DashboardLinkOpener();
         private static readonly CacheManager cacheManager = new CacheManager();
 
@@ -143,15 +142,8 @@ namespace StandSupportTool
 
         private void DisplayAntivirusInfo_Click(object sender, RoutedEventArgs e)
         {
-            var avInfos = antivirusInfo.GetAntivirusInfo();
-            string message = "Detected Antiviruses:\n";
-
-            foreach (var info in avInfos)
-            {
-                message += $"{info.DisplayName} at: {info.ExePath}\n";
-            }
-
-            MessageBox.Show(message, "Antivirus Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            AvChecker avChecker = new AvChecker();
+            avChecker.Show();
         }
 
         private void Dashboard_Click(object sender, RoutedEventArgs e) => dashboardLinkOpener.OpenDashboardLink();
