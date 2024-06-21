@@ -13,6 +13,10 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 
 ## Changelog
 
+### Version 0.6 06-21-24
+- Added dark mode for the title bar
+- Bugfixes
+
 ### Version 0.5 06-21-24
 - Refactored AV Checker
 - Some improvements and bugfixes
