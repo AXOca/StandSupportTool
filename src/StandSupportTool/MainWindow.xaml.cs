@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -29,6 +31,24 @@ namespace StandSupportTool
 
             // Check for updates asynchronously
             this.Loaded += async (s, e) => await CheckForUpdatesAsync();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var window = new WindowInteropHelper(this).Handle;
+            var attr = DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE;
+            var useImmersiveDarkMode = true;
+            DwmSetWindowAttribute(window, attr, ref useImmersiveDarkMode, Marshal.SizeOf(typeof(bool)));
+        }
+
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = true)]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref bool pvAttribute, int cbAttribute);
+
+        public enum DWMWINDOWATTRIBUTE
+        {
+            DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
         }
 
         // Initialize the activation key text box

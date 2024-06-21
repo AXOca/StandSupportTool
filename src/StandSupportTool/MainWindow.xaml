@@ -5,7 +5,8 @@
         Height="410" Width="644"
         Background="#1E1E1E" Foreground="White"
         FontFamily="Segoe UI" FontWeight="Normal"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Loaded="Window_Loaded">
 
     <!-- Window Resources -->
     <Window.Resources>
