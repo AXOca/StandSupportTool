@@ -7,7 +7,7 @@ Initial concept was made with Python on this project: [SST](https://github.com/A
 
 Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial polished version of my rough Python script in C#. They invited me to their repo, and I added a few features and optimized it. I also made the design (which is much easier in Visual Studio than what I did previously). Now, it's at least a tiny bit stand look-a-like like the website. That's it.
 
-![Screenshot of Stand Support Tool](https://i.ibb.co/9hydn1z/image.png)
+![Screenshot of Stand Support Tool](https://github.com/AXOca/StandSupportTool/assets/66976091/3747432b-26e4-4011-80e3-afe5ac561b05)
 
 ## To-Do List
 
