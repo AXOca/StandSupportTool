@@ -172,6 +172,16 @@ namespace StandSupportTool
             avChecker.Show();
         }
 
-        private void Dashboard_Click(object sender, RoutedEventArgs e) => dashboardLinkOpener.OpenDashboardLink();
+        private async void Diagnostics_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Diagnostics.DiagnosticsAsync();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"An error occurred while trying to run Diagnostics: {ex.Message}");
+            }
+        }
     }
 }

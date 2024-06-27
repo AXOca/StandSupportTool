@@ -1,7 +1,7 @@
 ﻿<Window x:Class="StandSupportTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Stand Support Tool (Version: 0.6)" 
+        Title="Stand Support Tool (Version: 0.7)" 
         Height="410" Width="644"
         Background="#1E1E1E" Foreground="White"
         FontFamily="Segoe UI" FontWeight="Normal"
@@ -200,7 +200,7 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Dashboard" Click="Dashboard_Click" Height="28" FontSize="14" Grid.Column="0" HorizontalAlignment="Stretch"/>
+            <Button Content="Diagnostics" Click="Diagnostics_Click" Height="28" FontSize="14" Grid.Column="0" HorizontalAlignment="Stretch"/>
             <Button Content="Hotkeys" Click="HotkeyButton_Click" Height="28" FontSize="14" Grid.Column="1" HorizontalAlignment="Stretch"/>
             <Button Content="DL Launchpad" Click="Launchpad_Click" Height="28" FontSize="14" Grid.Column="2" HorizontalAlignment="Stretch"/>
             <Button Content="Add Exclusion" Click="AddStandToExclusionsV2_Click" Height="28" FontSize="14" Grid.Column="3" HorizontalAlignment="Stretch"/>
