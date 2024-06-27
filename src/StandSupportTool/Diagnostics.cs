@@ -64,11 +64,11 @@ namespace StandSupportTool
             public string[] profile { get; set; }
             public StandChecks Checks { get; set; }
             public EnvironmentData EnvironmentData { get; set; }
-            public string[] installedLuaScripts { get; set; }
+            public Dictionary<string, List<string>> installedLuaScripts { get; set; }
             public LaunchpadData LaunchpadData { get; set; }
         }
 
-        static StandInjectionResult ParseLastStandInjection()
+        public static StandInjectionResult ParseLastStandInjection()
         {
             string logFilePath = Path.Combine(standDir, "Log.txt");
             string standInjectionRegex = @"^.*Stand\s\d+(\.\d+)?\sreporting\sfor\sduty!$";
@@ -80,22 +80,32 @@ namespace StandSupportTool
             {
                 if (File.Exists(logFilePath))
                 {
-                    string[] lines = File.ReadAllLines(logFilePath);
-
-                    // Find the index of the last line matching the regex
-                    int matchIndex = Array.FindLastIndex(lines, line => Regex.IsMatch(line, standInjectionRegex));
-
-                    if (matchIndex != -1)
+                    // Allows us to read the log even if the game is running with Stand injected.
+                    using (FileStream fs = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (StreamReader sr = new StreamReader(fs))
                     {
-                        result.Log = lines.Skip(matchIndex).ToArray();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No 'Stand' injection found in the log.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
+                        var lines = new List<string>();
+                        string? line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            lines.Add(line);
+                        }
 
-                    // Check for network issues within the log
-                    result.HasNetworkIssues = Regex.IsMatch(string.Join(Environment.NewLine, result.Log), networkErrorRegex);
+                        // Find the index of the last line matching the regex
+                        int matchIndex = lines.FindLastIndex(line => Regex.IsMatch(line, standInjectionRegex));
+
+                        if (matchIndex != -1)
+                        {
+                            result.Log = lines.Skip(matchIndex).ToArray();
+                        }
+                        else
+                        {
+                            MessageBox.Show("No 'Stand' injection found in the log.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+
+                        // Check for network issues within the log
+                        result.HasNetworkIssues = Regex.IsMatch(string.Join(Environment.NewLine, result.Log), networkErrorRegex);
+                    }
                 }
                 else
                 {
@@ -273,34 +283,65 @@ namespace StandSupportTool
             return guidString.Substring(0, length);
         }
 
-        static string[] GetInstalledLuaScripts()
+        public static async Task<Dictionary<string, List<string>>> GetInstalledLuaScripts()
         {
             string LuaPath = Path.Combine(appDataPath, "Stand", "Lua Scripts");
 
+            if (!Directory.Exists(LuaPath))
+            {
+                MessageBox.Show("Lua Script Directory doesn't exist", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new Dictionary<string, List<string>>();
+            }
+
+            Dictionary<string, List<string>> directoryFiles = new Dictionary<string, List<string>>();
+            Stack<string> directories = new Stack<string>();
+            directories.Push(LuaPath);
+
             try
             {
-                if (Directory.Exists(LuaPath))
+                while (directories.Count > 0)
                 {
-                    string[] files = Directory.GetFiles(LuaPath);
-                    for (int i = 0; i < files.Length; i++)
+                    string currentPath = directories.Pop();
+                    string relativeDir = Path.GetRelativePath(LuaPath, currentPath);
+
+                    if (!directoryFiles.ContainsKey(relativeDir))
                     {
-                        files[i] = Path.GetFileName(files[i]);
+                        directoryFiles[relativeDir] = new List<string>();
                     }
-                    return files;
+
+                    string[] files = await Task.Run(() => Directory.GetFiles(currentPath));
+                    foreach (string file in files)
+                    {
+                        string relativeFilePath = Path.GetRelativePath(LuaPath, file);
+                        directoryFiles[relativeDir].Add(Path.GetFileName(relativeFilePath));
+                    }
+
+                    string[] subDirectories = await Task.Run(() => Directory.GetDirectories(currentPath));
+                    foreach (string directory in subDirectories)
+                    {
+                        directories.Push(directory);
+                    }
                 }
-                else
-                {
-                    MessageBox.Show($"Lua Script Directory doesn't exist", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return Array.Empty<string>();
-                }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageBox.Show($"Access denied: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (PathTooLongException ex)
+            {
+                MessageBox.Show($"Path too long: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show($"IO error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error retrieving Lua scripts: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return Array.Empty<string>();
+                MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
 
+            return directoryFiles;
+        }
         static StandMetaState GetMetaState()
         {
             string metaStatePath = Path.Combine(standDir, "Meta State.txt");
@@ -563,7 +604,7 @@ namespace StandSupportTool
                 profile = GetUsedProfile(GetMetaState().profileName),
                 Checks = standChecks,
                 EnvironmentData = environmentData,
-                installedLuaScripts = GetInstalledLuaScripts(),
+                installedLuaScripts = await GetInstalledLuaScripts(),
                 LaunchpadData = GetLaunchpadProfile()
             };
 

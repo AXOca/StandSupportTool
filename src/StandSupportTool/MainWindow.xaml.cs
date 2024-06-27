@@ -18,7 +18,7 @@ namespace StandSupportTool
         private static readonly ActivationManager activationManager = new ActivationManager();
         private static readonly HotkeyManager hotkeyManager = new HotkeyManager();
         private static readonly ClearHotkeysManager clearHotkeysManager = new ClearHotkeysManager();
-        private static UpdateManager? updateManager; // Declare as nullable
+        private static UpdateManager? updateManager;
         private static readonly DashboardLinkOpener dashboardLinkOpener = new DashboardLinkOpener();
         private static readonly CacheManager cacheManager = new CacheManager();
 

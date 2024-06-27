@@ -58,6 +58,21 @@ namespace StandSupportTool
             return choosenProtocol;
         }
 
+        // Focus "Unload" on Stand
+
+        public void focusUnload()
+        {
+            try
+            {
+                string unloadLink = "Stand-Focus-Stand>Unload Stand";
+                Clipboard.SetText(unloadLink);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to focus unload: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         // Write the chosen protocol to the file
         public void writeProtocol()
         {
@@ -99,7 +114,10 @@ namespace StandSupportTool
                     }
                 }
 
-                MessageBox.Show("Protocol changed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Protocol changed successfully.\nMake sure to Unload and reinject Stand!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Focuses Unload on Stand (Hopefully the user will press that damn button!)
+                focusUnload();
             }
             catch (Exception ex)
             {
