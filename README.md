@@ -16,9 +16,13 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 
 ## Changelog
 
-### Version 0.6 06-21-24
-- Added dark mode for the title bar
+### Version 0.8 06-29-24
+- Improve Diagnostics
+- Add "Unload" Focus Link when changing protocol
 - Bugfixes
+
+### Version 0.7 06-28-24
+- Added Diagnostics
 
 ### Version 0.5 06-21-24
 - Refactored AV Checker
