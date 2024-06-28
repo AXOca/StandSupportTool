@@ -15,13 +15,17 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 - Add translation support for all languages already supported by Stand itself.
 
 ## Changelog
+### Version 0.8 06-28-24
+- Improve Versioning
+- Improve Update Manager (now uses github releases)
+- Bugfixes
 
-### Version 0.8 06-29-24
+### Version 0.8 06-28-24
 - Improve Diagnostics
 - Add "Unload" Focus Link when changing protocol
 - Bugfixes
 
-### Version 0.7 06-28-24
+### Version 0.7 06-27-24
 - Added Diagnostics
 
 ### Version 0.5 06-21-24
