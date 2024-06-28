@@ -11,6 +11,12 @@
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/AXOca/StandSupportTool</PackageProjectUrl>
+    <AssemblyVersion>0.9</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <Version>$(AssemblyVersion)</Version>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

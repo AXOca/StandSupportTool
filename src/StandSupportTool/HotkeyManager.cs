@@ -126,7 +126,7 @@ namespace StandSupportTool
             {
                 string line = lines[i];
 
-                if (!line.Contains(":"))
+                if (!line.Contains(':'))
                     continue;
 
                 string[] parts = line.Split(':');

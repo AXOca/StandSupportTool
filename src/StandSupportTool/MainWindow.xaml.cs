@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace StandSupportTool
 {
@@ -24,6 +25,7 @@ namespace StandSupportTool
 
         public MainWindow()
         {
+            this.Title = $"Stand Support Tool (Version: {GetVersion()})";
             InitializeComponent();
             InitializeActivationKeyText();
             InitializeProtocol();
@@ -73,18 +75,18 @@ namespace StandSupportTool
                 }
             }
         }
-
-        // Extract the version number from the window title
-        private string ExtractVersionFromTitle(string title)
+        private string GetVersion()
         {
-            string[] parts = title.Split(new[] { "Version: " }, StringSplitOptions.None);
-            return parts.Length > 1 ? parts[1].TrimEnd(')') : "0.0"; // Default version if not found
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            // Fallback to 1.0 when we don't know the version we're running on!
+            return version != null ? version.ToString() : "1.0";
         }
 
         // Initialize the update manager
         private void InitializeUpdateManager()
         {
-            string currentVersion = ExtractVersionFromTitle(this.Title);
+            string currentVersion = GetVersion();
+            Trace.WriteLine(currentVersion);
             string? executablePath = Process.GetCurrentProcess().MainModule?.FileName;
 
             if (executablePath == null)
