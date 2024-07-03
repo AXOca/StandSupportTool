@@ -2,7 +2,7 @@
 
 namespace StandSupportTool
 {
-    public partial class HotkeysTable : Window
+    public partial class HotkeysTable : BaseWindow
     {
         private static HotkeyManager hotkeyManager;
         private static ClearHotkeysManager clearHotkeysManager = new ClearHotkeysManager();

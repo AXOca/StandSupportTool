@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace StandSupportTool
 {
@@ -66,55 +65,10 @@ namespace StandSupportTool
         }
 
         // Method to show a dialog to set the activation key
-        public void SetActivationKey(TextBox activationKeyTextBox)
+        public void SetActivationKey()
         {
-            // Create and configure the input dialog window
-            Window inputDialog = new Window
-            {
-                Title = "Enter Activation Key",
-                Width = 300,
-                Height = 150,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ResizeMode = ResizeMode.NoResize
-            };
-
-            StackPanel stackPanel = new StackPanel { Margin = new Thickness(10) };
-
-            // Add components to the dialog window
-            stackPanel.Children.Add(new TextBlock { Text = "Enter Activation Key:", Margin = new Thickness(0, 0, 0, 10) });
-            TextBox textBox = new TextBox { Width = 250, Margin = new Thickness(0, 0, 0, 10) };
-            stackPanel.Children.Add(textBox);
-
-            StackPanel buttonPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
-
-            // OK button
-            Button okButton = new Button { Content = "OK", Width = 75, Margin = new Thickness(0, 0, 10, 0) };
-            okButton.Click += (s, args) =>
-            {
-                inputDialog.DialogResult = true;
-                inputDialog.Close();
-            };
-            buttonPanel.Children.Add(okButton);
-
-            // Cancel button
-            Button cancelButton = new Button { Content = "Cancel", Width = 75 };
-            cancelButton.Click += (s, args) =>
-            {
-                inputDialog.DialogResult = false;
-                inputDialog.Close();
-            };
-            buttonPanel.Children.Add(cancelButton);
-
-            stackPanel.Children.Add(buttonPanel);
-            inputDialog.Content = stackPanel;
-
-            // Show dialog and set activation key if OK was clicked
-            if (inputDialog.ShowDialog() == true)
-            {
-                string activationKey = textBox.Text;
-                WriteActivationKey(activationKey);
-                activationKeyTextBox.Text = ReadActivationKey().Replace("Stand-Activate-", "");
-            }
+            ActivationKey activationKeyWindow = new ActivationKey();
+            activationKeyWindow.ShowDialog();
         }
     }
 }

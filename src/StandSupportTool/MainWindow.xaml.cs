@@ -150,7 +150,9 @@ namespace StandSupportTool
 
         private void SetActivationKey_Click(object sender, RoutedEventArgs e)
         {
-            activationManager.SetActivationKey(ActivationKeyText);
+            activationManager.SetActivationKey();
+            // Updates the key back when the user saved it
+            ActivationKeyText.Text = activationManager.ReadActivationKey().Replace("Stand-Activate-", "");
         }
 
         private void HotkeyButton_Click(object sender, RoutedEventArgs e)

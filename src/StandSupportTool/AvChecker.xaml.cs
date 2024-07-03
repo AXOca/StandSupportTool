@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace StandSupportTool
 {
-    public partial class AvChecker : Window
+    public partial class AvChecker : BaseWindow
     {
 
         static AntivirusInfo antivirusInfo = new AntivirusInfo();
