@@ -161,7 +161,7 @@ namespace StandSupportTool
 
         private void OpenYouTubeLink_Click(object sender, RoutedEventArgs e) => YouTubeLinkOpener.OpenYouTubeLink();
 
-        private void AddStandToExclusionsV2_Click(object sender, RoutedEventArgs e) => PowerShellExecutor.ExecuteAddMpPreference();
+        private void AddStandToExclusionsV2_Click(object sender, RoutedEventArgs e) => ExclusionManager.AddDefenderExclusion();
 
         private async void Launchpad_Click(object sender, RoutedEventArgs e)
         {
