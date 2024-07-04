@@ -12,6 +12,9 @@
     <Compile Update="ActivationKey.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="SelectLogWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="themes\Dark.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -21,6 +24,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SelectLogWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="themes\Dark.xaml">
