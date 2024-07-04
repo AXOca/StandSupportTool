@@ -7,15 +7,19 @@ Initial concept was made with Python on this project: [SST](https://github.com/A
 
 Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial polished version of my rough Python script in C#. They invited me to their repo, and I added a few features and optimized it. I also made the design (which is much easier in Visual Studio than what I did previously). Now, it's at least a tiny bit stand look-a-like like the website. That's it.
 
-![Screenshot of Stand Support Tool](https://github.com/AXOca/StandSupportTool/assets/66976091/3747432b-26e4-4011-80e3-afe5ac561b05)
+![Screenshot of Stand Support Tool](https://github.com/AXOca/StandSupportTool/assets/66976091/e8250050-e0ff-4d83-b5e3-a791dbd75ecb)
 
 ## To-Do List
 
-- Improve the "Copy Log to Clipboard" feature by allowing users to select the number of instances of Stand to be copied (from one Welcome Message to the next).
 - Add translation support for all languages already supported by Stand itself.
 
 ## Changelog
-### Version 0.8 06-28-24
+### Version 1.0 07-05-24
+- Rework UI
+- Improve Copy Log to Clipboard
+- Bugfixes
+  
+### Version 0.9 06-28-24
 - Improve Versioning
 - Improve Update Manager (now uses github releases)
 - Bugfixes
