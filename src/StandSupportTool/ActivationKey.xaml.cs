@@ -26,9 +26,10 @@ namespace StandSupportTool
             int startIndex = activationKey.IndexOf(validPattern) + validPattern.Length;
             string keySuffix = activationKey.Substring(startIndex);
 
+            // This will work as long as keys don't contain uppercase characters
             if (!keySuffix.All(c => char.IsLower(c) || char.IsDigit(c)))
             {
-                MessageBox.Show("The key suffix must be all lowercase.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("This is not an activation key, it contains uppercase characters.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
