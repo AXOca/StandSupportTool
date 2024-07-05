@@ -170,7 +170,7 @@ namespace StandSupportTool
 
                 if (dllFiles.Length == 0)
                 {
-                    MessageBox.Show($"Cannot find any Stand dll in '{BinPath}'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Cannot find any Stand dll in: '{BinPath}'\nwhile checking if Stand DLL matches the upstream.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
 
@@ -265,7 +265,15 @@ namespace StandSupportTool
             string upstreamVersion = await GetUpstreamVersion();
 
             string BinPath = System.IO.Path.Combine(appDataPath, "Stand", "Bin");
-            string dllName = Path.GetFileName(Directory.GetFiles(BinPath, "Stand*.dll")[0]);
+            string[] dllFiles = Directory.GetFiles(BinPath, "Stand*.dll");
+
+            if (dllFiles.Length == 0)
+            {
+                MessageBox.Show($"Cannot find any Stand dll in: '{BinPath}'\nwhile checking if Stand is up to date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            string dllName = Path.GetFileName(dllFiles[0]);
 
             string localVersion = dllName.Replace("Stand ", "").Replace(".dll", "");
 
