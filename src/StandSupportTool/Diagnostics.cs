@@ -166,8 +166,15 @@ namespace StandSupportTool
             try
             {
                 string BinPath = System.IO.Path.Combine(appDataPath, "Stand", "Bin");
-                string dllName = Path.GetFileName(Directory.GetFiles(BinPath, "Stand*.dll")[0]);
+                string[] dllFiles = Directory.GetFiles(BinPath, "Stand*.dll");
 
+                if (dllFiles.Length == 0)
+                {
+                    MessageBox.Show($"No DLL files found in '{BinPath}'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+
+                string dllName = Path.GetFileName(dllFiles[0]);
                 string remoteUrl = $"https://stand.gg/{Uri.EscapeDataString(dllName)}";
 
                 using (HttpClient client = new HttpClient())
@@ -193,10 +200,9 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error downloading upstream dll, reason: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error downloading upstream DLL, reason: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-            return false;
         }
 
         static async Task<bool> ConnectionCheck()
