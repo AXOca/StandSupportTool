@@ -48,6 +48,7 @@ namespace StandSupportTool
         {
             public string OS_VERSION { get; set; }
             public NetworkInfo networkInfo { get; set; }
+            public bool isRunningInCompatibilityMode { get; set; }
         }
 
         public class LaunchpadData
@@ -581,6 +582,8 @@ namespace StandSupportTool
 
             EnvironmentData environmentData = new EnvironmentData();
 
+            CompatibilityScanner compatibilityScanner = new CompatibilityScanner();
+
             if (isAbleToConnect)
             {
                 bool shaValidationCheck = await PerformSHAChecks();
@@ -595,6 +598,7 @@ namespace StandSupportTool
 
             environmentData.networkInfo = await GetNetworkInfoAsync();
             environmentData.OS_VERSION = Environment.OSVersion.ToString();
+            environmentData.isRunningInCompatibilityMode = compatibilityScanner.IsGameRunningInCompatibilityMode();
 
             StandDumpData data = new StandDumpData
             {

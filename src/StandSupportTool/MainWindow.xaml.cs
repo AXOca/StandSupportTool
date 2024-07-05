@@ -86,7 +86,7 @@ namespace StandSupportTool
         private void InitializeUpdateManager()
         {
             string currentVersion = GetVersion();
-            Trace.WriteLine(currentVersion);
+            //Trace.WriteLine(currentVersion);
             string? executablePath = Process.GetCurrentProcess().MainModule?.FileName;
 
             if (executablePath == null)
@@ -184,7 +184,7 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                Trace.WriteLine($"An error occurred while trying to run Diagnostics: {ex.Message}");
+                MessageBox.Show($"An error occurred while trying to run Diagnostics: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
