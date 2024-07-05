@@ -8,7 +8,8 @@
                   Title="Enter Activation Key" 
                   Height="200" Width="400"
                   Background="#1E1E1E" Foreground="White"
-                  FontFamily="Segoe UI" FontWeight="Normal">
+                  FontFamily="Segoe UI" FontWeight="Normal"
+                  ResizeMode="NoResize">
 
     <!-- Window Resources -->
     <Window.Resources>
