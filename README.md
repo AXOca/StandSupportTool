@@ -14,6 +14,14 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 - Add translation support for all languages already supported by Stand itself.
 
 ## Changelog
+### Version 1.1 07-06-24
+- Added Compatibility Checks for Diagnostics
+- Improved error handling for cases when the Stand DLL is missing in the Bin folder (When performing Diagnostics)
+- Refactored the version display to show only the major and minor version numbers (Title Bar)
+- Modified the window spawning behavior to position windows in more human-friendly locations
+- Improved checks for the Activation Key to ensure better validation
+- Bugfixes
+  
 ### Version 1.0 07-05-24
 - Rework UI
 - Improve Copy Log to Clipboard
