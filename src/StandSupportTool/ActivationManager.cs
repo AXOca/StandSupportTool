@@ -65,9 +65,10 @@ namespace StandSupportTool
         }
 
         // Method to show a dialog to set the activation key
-        public void SetActivationKey()
+        public void SetActivationKey(Window ownerWindow)
         {
             ActivationKey activationKeyWindow = new ActivationKey();
+            activationKeyWindow.Owner = ownerWindow;
             activationKeyWindow.ShowDialog();
         }
     }

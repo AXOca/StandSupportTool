@@ -150,7 +150,7 @@ namespace StandSupportTool
 
         private void SetActivationKey_Click(object sender, RoutedEventArgs e)
         {
-            activationManager.SetActivationKey();
+            activationManager.SetActivationKey(this);
             // Updates the key back when the user saved it
             ActivationKeyText.Text = activationManager.ReadActivationKey().Replace("Stand-Activate-", "");
         }
@@ -158,7 +158,8 @@ namespace StandSupportTool
         private void HotkeyButton_Click(object sender, RoutedEventArgs e)
         {
             HotkeysTable hotkeysTable = new HotkeysTable();
-            hotkeysTable.Show();
+            hotkeysTable.Owner = this;
+            hotkeysTable.ShowDialog();
         }
 
         private void OpenYouTubeLink_Click(object sender, RoutedEventArgs e) => YouTubeLinkOpener.OpenYouTubeLink();
@@ -173,7 +174,8 @@ namespace StandSupportTool
         private void DisplayAntivirusInfo_Click(object sender, RoutedEventArgs e)
         {
             AvChecker avChecker = new AvChecker();
-            avChecker.Show();
+            avChecker.Owner = this;
+            avChecker.ShowDialog();
         }
 
         private async void Diagnostics_Click(object sender, RoutedEventArgs e)
