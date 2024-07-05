@@ -79,7 +79,7 @@ namespace StandSupportTool
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             // Fallback to 1.0 when we don't know the version we're running on!
-            return version != null ? version.ToString() : "1.0";
+            return version != null ? $"{version.Major}.{version.Minor}" : "1.0";
         }
 
         // Initialize the update manager
