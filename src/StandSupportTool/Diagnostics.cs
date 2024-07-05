@@ -170,7 +170,7 @@ namespace StandSupportTool
 
                 if (dllFiles.Length == 0)
                 {
-                    MessageBox.Show($"No DLL files found in '{BinPath}'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Cannot find any Stand dll in '{BinPath}'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
 
