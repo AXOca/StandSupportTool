@@ -14,6 +14,9 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 - Add translation support for all languages already supported by Stand itself.
 
 ## Changelog
+### Version 1.2 07-06-24
+- Fix profile names with spaces causing diagnostics to fail
+ 
 ### Version 1.1 07-06-24
 - Added Compatibility Checks for Diagnostics
 - Improved error handling for cases when the Stand DLL is missing in the Bin folder (When performing Diagnostics)
