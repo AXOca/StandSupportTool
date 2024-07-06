@@ -368,14 +368,13 @@ namespace StandSupportTool
                 {
                     metaState.state = File.ReadAllLines(metaStatePath);
 
-                    Regex profileRegex = new Regex(@"Load On Inject: (\w+)");
-                    Regex pre116ProfileRegex = new Regex(@"Active Profile: (\w+)");
+                    Regex profileRegex = new Regex(@"Load On Inject: (.+)");
+                    Regex pre116ProfileRegex = new Regex(@"Active Profile: (.+)");
 
                     foreach (string line in metaState.state)
                     {
                         // We are returning in the if statements just to avoid having override issues when someone might have
                         // a corrupted Meta State for whatever reason
-
                         Match match = profileRegex.Match(line);
                         if (match.Success)
                         {
