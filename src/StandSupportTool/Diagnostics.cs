@@ -379,7 +379,7 @@ namespace StandSupportTool
                         Match match = profileRegex.Match(line);
                         if (match.Success)
                         {
-                            metaState.profileName = match.Groups[1].Value;
+                            metaState.profileName = match.Groups[1].Value.Trim();
                             return metaState;
                         }
 
@@ -387,7 +387,7 @@ namespace StandSupportTool
                         match = pre116ProfileRegex.Match(line);
                         if (match.Success)
                         {
-                            metaState.profileName = match.Groups[1].Value;
+                            metaState.profileName = match.Groups[1].Value.Trim();
                             return metaState;
                         }
                     }
@@ -400,7 +400,6 @@ namespace StandSupportTool
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to read Meta State file, reason: {ex.Message}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
             }
 
             // Nothing was found in there, must be Default profile!
