@@ -10,6 +10,14 @@ namespace StandSupportTool
     {
         public static void AddDefenderExclusion()
         {
+            AntivirusInfo antivirusInfo = new AntivirusInfo();
+
+            if (!antivirusInfo.IsDefenderInstalled())
+            {
+                MessageBox.Show("Seems like Defender is not installed in your system, this is not supported.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             MessageBoxResult result = MessageBox.Show(
                 "This feature will add an exclusion for Stand's BIN folder on Windows Defender.\n\nFor this, we need admin permissions.\n\nDo you want to continue?",
                 "Confirmation",
@@ -61,7 +69,6 @@ namespace StandSupportTool
         {
             try
             {
-
                 if (IsExclusionAdded(exclusionPath))
                 {
                     MessageBox.Show("Exclusion already exists.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);

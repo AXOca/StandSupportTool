@@ -45,5 +45,18 @@ namespace StandSupportTool
 
             return antivirusInfos;
         }
+        public bool IsDefenderInstalled()
+        {
+            List<AntivirusInfo> antivirusInfos = GetAntivirusInfo();
+            foreach (var antivirus in antivirusInfos)
+            {
+                if (antivirus.DisplayName.Contains("Defender", StringComparison.OrdinalIgnoreCase) ||
+                    antivirus.DisplayName.Contains("Windows Defender", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
