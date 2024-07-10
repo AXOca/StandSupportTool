@@ -14,6 +14,11 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 - Add translation support for all languages already supported by Stand itself.
 
 ## Changelog
+
+### Version 1.3 07-10-24
+- Ensure user has Windows Defender before trying to exclude directory
+- Improve Diagnostics by getting OS name and adding Antivirus Info
+  
 ### Version 1.2 07-06-24
 - Fix profile names with spaces causing diagnostics to fail
  
