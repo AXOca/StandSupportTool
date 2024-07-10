@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using System.Security.Cryptography;
+using System.Management;
 
 namespace StandSupportTool
 {
@@ -49,6 +50,7 @@ namespace StandSupportTool
             public string OS_VERSION { get; set; }
             public NetworkInfo networkInfo { get; set; }
             public bool isRunningInCompatibilityMode { get; set; }
+            public List<AntivirusInfo> antivirusInfo { get; set; }
         }
 
         public class LaunchpadData
@@ -584,7 +586,26 @@ namespace StandSupportTool
             // Return empty data
             return new LaunchpadData();
         }
+        static string GetOSName()
+        {
+            string osName = "Unknown";
 
+            try
+            {
+                using ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
+                foreach (ManagementObject os in searcher.Get())
+                {
+                    osName = os["Caption"]?.ToString() ?? "Unknown OS";
+                    break;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception caught: " + e.Message);
+            }
+
+            return osName;
+        }
         public static async Task DiagnosticsAsync()
         {
             StandInjectionResult lastInjection = ParseLastStandInjection();
@@ -595,6 +616,8 @@ namespace StandSupportTool
             EnvironmentData environmentData = new EnvironmentData();
 
             CompatibilityScanner compatibilityScanner = new CompatibilityScanner();
+
+            AntivirusInfo antivirusInfo = new AntivirusInfo();
 
             if (isAbleToConnect)
             {
@@ -609,8 +632,9 @@ namespace StandSupportTool
             }
 
             environmentData.networkInfo = await GetNetworkInfoAsync();
-            environmentData.OS_VERSION = Environment.OSVersion.ToString();
+            environmentData.OS_VERSION = GetOSName();
             environmentData.isRunningInCompatibilityMode = compatibilityScanner.IsGameRunningInCompatibilityMode();
+            environmentData.antivirusInfo = antivirusInfo.GetAntivirusInfo();
 
             StandDumpData data = new StandDumpData
             {
