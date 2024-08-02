@@ -9,7 +9,7 @@ namespace StandSupportTool
 {
     public static class LaunchpadManager
     {
-        private const string ZipUrl = "https://github.com/AXOca/StandSupportTool/raw/launchpad/launchpad.zip";
+        private const string ZipUrl = "https://github.com/AXOca/StandSupportTool/raw/main/launchpad/launchpad.zip";
         private const string ConfirmationMessage = "This feature will download Stand's Launchpad into a new folder on your desktop and exclude it automatically from Windows Defender.\n\nFor this, we need admin permissions.\n\nDo you want to continue?";
         private const string SuccessMessage = "Done.\n\nLook at your Desktop, go into the \"Stand_Launchpad\" folder and unpack it.\n\nThe password is: stand.sh";
         private const string ErrorMessage = "Operation cancelled or failed due to insufficient permissions.";
