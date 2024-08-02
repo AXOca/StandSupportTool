@@ -11,7 +11,7 @@ namespace StandSupportTool
     {
         public void OpenDashboardLink()
         {
-            string url = "https://stand.gg/account/";
+            string url = "https://stand.sh/account/";
 
             Process.Start(new ProcessStartInfo
             {

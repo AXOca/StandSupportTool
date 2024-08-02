@@ -177,7 +177,7 @@ namespace StandSupportTool
                 }
 
                 string dllName = Path.GetFileName(dllFiles[0]);
-                string remoteUrl = $"https://stand.gg/{Uri.EscapeDataString(dllName)}";
+                string remoteUrl = $"https://stand.sh/{Uri.EscapeDataString(dllName)}";
 
                 using (HttpClient client = new HttpClient())
                 {
@@ -209,7 +209,7 @@ namespace StandSupportTool
 
         static async Task<bool> ConnectionCheck()
         {
-            string url = "https://stand.gg/";
+            string url = "https://stand.sh/";
 
             try
             {
@@ -227,14 +227,14 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error connecting to stand.gg: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error connecting to stand.sh: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
         }
 
         static async Task<string> GetUpstreamVersion()
         {
-            string url = "https://stand.gg/versions.txt";
+            string url = "https://stand.sh/versions.txt";
 
             try
             {
@@ -257,7 +257,7 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error connecting to stand.gg for upstream: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error connecting to stand.sh for upstream: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return "";
         }
@@ -475,7 +475,7 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error connecting to stand.gg: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error connecting to stand.sh: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             // Return empty info
