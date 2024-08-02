@@ -15,6 +15,11 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 
 ## Changelog
 
+### Version 1.4 07-02-24
+- Update links to stand.sh
+- Update Launchpad url
+- Update Regex for Injection check and also improve log reader
+
 ### Version 1.3 07-10-24
 - Ensure user has Windows Defender before trying to exclude directory
 - Improve Diagnostics by getting OS name and adding Antivirus Info
