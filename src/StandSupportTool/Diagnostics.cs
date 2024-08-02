@@ -74,8 +74,8 @@ namespace StandSupportTool
         public static StandInjectionResult ParseLastStandInjection()
         {
             string logFilePath = Path.Combine(standDir, "Log.txt");
-            string standInjectionRegex = @"^.*Stand\s\d+(\.\d+)?\sreporting\sfor\sduty!$";
-            string networkErrorRegex = @"Failed to send a request to stand\.gg:";
+            string standInjectionRegex = @"Stand \d+(\.\d+)+ reporting for duty!";
+            string networkErrorRegex = @"Failed to send a request to stand\.sh:";
 
             StandInjectionResult result = new StandInjectionResult();
 
@@ -91,11 +91,16 @@ namespace StandSupportTool
                         string? line;
                         while ((line = sr.ReadLine()) != null)
                         {
+                            if (line == null)
+                            {
+                                MessageBox.Show("Encountered a null line in log file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return result;
+                            }
                             lines.Add(line);
                         }
 
                         // Find the index of the last line matching the regex
-                        int matchIndex = lines.FindLastIndex(line => Regex.IsMatch(line, standInjectionRegex));
+                        int matchIndex = lines.FindLastIndex(line => line != null && Regex.IsMatch(line, standInjectionRegex));
 
                         if (matchIndex != -1)
                         {
@@ -106,8 +111,11 @@ namespace StandSupportTool
                             MessageBox.Show("No 'Stand' injection found in the log.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                         }
 
-                        // Check for network issues within the log
-                        result.HasNetworkIssues = Regex.IsMatch(string.Join(Environment.NewLine, result.Log), networkErrorRegex);
+                        if (result.Log != null)
+                        {
+                            // Check for network issues within the log
+                            result.HasNetworkIssues = Regex.IsMatch(string.Join(Environment.NewLine, result.Log), networkErrorRegex);
+                        }
                     }
                 }
                 else
