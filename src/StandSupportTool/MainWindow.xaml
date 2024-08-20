@@ -341,7 +341,39 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Activation Key:" VerticalAlignment="Center" Grid.Column="0" Margin="5"/>
-            <TextBox x:Name="ActivationKeyText" Width="300" Grid.Column="1" Margin="5,5,5,5" IsReadOnly="True"/>
+            <TextBox x:Name="ActivationKeyText" Width="300" Grid.Column="1" Margin="5,5,5,5" IsReadOnly="True">
+                <TextBox.Effect>
+                    <BlurEffect Radius="10" />
+                </TextBox.Effect>
+                <TextBox.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Effect">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                        <DiscreteObjectKeyFrame.Value>
+                                            <x:Null />
+                                        </DiscreteObjectKeyFrame.Value>
+                                    </DiscreteObjectKeyFrame>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Effect">
+                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.2">
+                                        <DiscreteObjectKeyFrame.Value>
+                                            <BlurEffect Radius="10" />
+                                        </DiscreteObjectKeyFrame.Value>
+                                    </DiscreteObjectKeyFrame>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </TextBox.Triggers>
+            </TextBox>
             <Button Content="Set Key" Click="SetActivationKey_Click" Grid.Column="2" Margin="5,5,5,5"/>
         </Grid>
     </Grid>
