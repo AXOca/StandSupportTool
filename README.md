@@ -15,6 +15,10 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 
 ## Changelog
 
+### Version 1.5 08-20-24
+- Add 3rd Party AV Check for Launchpad download
+- Implement fade in/out for Activation Key
+
 ### Version 1.4 07-02-24
 - Update links to stand.sh
 - Update Launchpad url
