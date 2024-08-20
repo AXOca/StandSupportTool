@@ -58,5 +58,19 @@ namespace StandSupportTool
             }
             return false;
         }
+
+        public bool Is3rdPartyInstalled()
+        {
+            List<AntivirusInfo> antivirusInfos = GetAntivirusInfo();
+            foreach (var antivirus in antivirusInfos)
+            {
+                if (!antivirus.DisplayName.Contains("Defender", StringComparison.OrdinalIgnoreCase) &&
+                    !antivirus.DisplayName.Contains("Windows Defender", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

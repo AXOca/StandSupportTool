@@ -168,6 +168,16 @@ namespace StandSupportTool
 
         private async void Launchpad_Click(object sender, RoutedEventArgs e)
         {
+            AntivirusInfo avInfo = new AntivirusInfo();
+
+            if (avInfo.Is3rdPartyInstalled()) 
+            {
+                MessageBox.Show("Third-party antivirus software detected\nThis could cause issues when downloading the Launchpad.",
+                "3rd Party Antivirus Detected",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            }
+
             await LaunchpadManager.PerformTest();
         }
 
