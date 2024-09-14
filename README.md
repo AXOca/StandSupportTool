@@ -15,6 +15,9 @@ Afterwards, [Alessandro](https://github.com/alessandromrc) made the initial poli
 
 ## Changelog
 
+### Version 1.6 09-14-24
+- Updated profile detection to match Stand's new "Load On Inject" syntax
+
 ### Version 1.5 08-20-24
 - Add 3rd Party AV Check for Launchpad download
 - Implement fade in/out for Activation Key
