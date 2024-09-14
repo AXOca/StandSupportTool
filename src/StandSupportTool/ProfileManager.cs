@@ -28,7 +28,7 @@ namespace StandSupportTool
                     var lines = File.ReadAllLines(metaStateFilePath);
                     foreach (var line in lines)
                     {
-                        if (line.StartsWith("Active Profile:"))
+                        if (line.StartsWith("Load On Inject:"))
                         {
                             return line.Split(':')[1].Trim();
                         }
