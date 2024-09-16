@@ -23,7 +23,12 @@ namespace StandSupportTool
                         }
                         else
                         {
-                            MessageBox.Show("Invalid arguments for adding exclusion.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(
+                                "Invalid arguments for adding exclusion.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error
+                            );
                             Environment.Exit(1);
                         }
                         break;
@@ -34,7 +39,12 @@ namespace StandSupportTool
                     //     break;
 
                     default:
-                        MessageBox.Show("Unknown command.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            "Unknown command.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                         Environment.Exit(1);
                         break;
                 }

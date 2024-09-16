@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -11,14 +13,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
-using System.Security.Cryptography;
-using System.Management;
 
 namespace StandSupportTool
 {
     internal class Diagnostics
     {
-        static string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        static string appDataPath = Environment.GetFolderPath(
+            Environment.SpecialFolder.ApplicationData
+        );
         static string standDir = Path.Combine(appDataPath, "Stand");
 
         public class StandInjectionResult
@@ -33,6 +35,7 @@ namespace StandSupportTool
             public bool SHAValidationCheck { get; set; }
             public bool isUpToDate { get; set; }
         }
+
         public class StandMetaState
         {
             public string[] state { get; set; }
@@ -84,7 +87,14 @@ namespace StandSupportTool
                 if (File.Exists(logFilePath))
                 {
                     // Allows us to read the log even if the game is running with Stand injected.
-                    using (FileStream fs = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (
+                        FileStream fs = new FileStream(
+                            logFilePath,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.ReadWrite
+                        )
+                    )
                     using (StreamReader sr = new StreamReader(fs))
                     {
                         var lines = new List<string>();
@@ -93,14 +103,21 @@ namespace StandSupportTool
                         {
                             if (line == null)
                             {
-                                MessageBox.Show("Encountered a null line in log file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show(
+                                    "Encountered a null line in log file.",
+                                    "Error",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Error
+                                );
                                 return result;
                             }
                             lines.Add(line);
                         }
 
                         // Find the index of the last line matching the regex
-                        int matchIndex = lines.FindLastIndex(line => line != null && Regex.IsMatch(line, standInjectionRegex));
+                        int matchIndex = lines.FindLastIndex(line =>
+                            line != null && Regex.IsMatch(line, standInjectionRegex)
+                        );
 
                         if (matchIndex != -1)
                         {
@@ -108,24 +125,42 @@ namespace StandSupportTool
                         }
                         else
                         {
-                            MessageBox.Show("No 'Stand' injection found in the log.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            MessageBox.Show(
+                                "No 'Stand' injection found in the log.",
+                                "Warning",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning
+                            );
                         }
 
                         if (result.Log != null)
                         {
                             // Check for network issues within the log
-                            result.HasNetworkIssues = Regex.IsMatch(string.Join(Environment.NewLine, result.Log), networkErrorRegex);
+                            result.HasNetworkIssues = Regex.IsMatch(
+                                string.Join(Environment.NewLine, result.Log),
+                                networkErrorRegex
+                            );
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Log file does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        "Log file does not exist.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read log file, reason: {ex.Message}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to read log file, reason: {ex.Message}.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             return result;
@@ -148,15 +183,30 @@ namespace StandSupportTool
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show($"Stand.dll not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Stand.dll not found.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (IOException ex)
             {
-                MessageBox.Show($"Error reading Stand.dll, reason:{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error reading Stand.dll, reason:{ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error calculating SHA-256 hash for Stand.dll: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error calculating SHA-256 hash for Stand.dll: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             return "";
@@ -180,7 +230,12 @@ namespace StandSupportTool
 
                 if (dllFiles.Length == 0)
                 {
-                    MessageBox.Show($"Cannot find any Stand dll in: '{BinPath}'\nwhile checking if Stand DLL matches the upstream.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        $"Cannot find any Stand dll in: '{BinPath}'\nwhile checking if Stand DLL matches the upstream.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                     return false;
                 }
 
@@ -198,19 +253,32 @@ namespace StandSupportTool
                         string downloadedSHA256 = CalculateSHA256(dllBytes);
                         string installedSHA256 = GetInstalledDllSHA256();
 
-                        bool shaMatches = downloadedSHA256.Equals(installedSHA256, StringComparison.OrdinalIgnoreCase);
+                        bool shaMatches = downloadedSHA256.Equals(
+                            installedSHA256,
+                            StringComparison.OrdinalIgnoreCase
+                        );
                         return shaMatches;
                     }
                     else
                     {
-                        MessageBox.Show($"Failed to download DLL '{dllName}'. Status code: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            $"Failed to download DLL '{dllName}'. Status code: {response.StatusCode}",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                         return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error downloading upstream DLL, reason: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error downloading upstream DLL, reason: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return false;
             }
         }
@@ -230,12 +298,22 @@ namespace StandSupportTool
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show($"HTTP request error, reason: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"HTTP request error, reason: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error connecting to stand.sh: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error connecting to stand.sh: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return false;
             }
         }
@@ -255,17 +333,29 @@ namespace StandSupportTool
                         string receivedVersions = await response.Content.ReadAsStringAsync();
 
                         int colonIndex = receivedVersions.IndexOf(':');
-                        return colonIndex != -1 ? new string(receivedVersions.Skip(colonIndex + 1).ToArray()).Trim() : string.Empty;
+                        return colonIndex != -1
+                            ? new string(receivedVersions.Skip(colonIndex + 1).ToArray()).Trim()
+                            : string.Empty;
                     }
                 }
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show($"HTTP request error when trying to get upstream: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"HTTP request error when trying to get upstream: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error connecting to stand.sh for upstream: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error connecting to stand.sh for upstream: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             return "";
         }
@@ -279,7 +369,12 @@ namespace StandSupportTool
 
             if (dllFiles.Length == 0)
             {
-                MessageBox.Show($"Cannot find any Stand dll in: '{BinPath}'\nwhile checking if Stand is up to date.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Cannot find any Stand dll in: '{BinPath}'\nwhile checking if Stand is up to date.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return false;
             }
 
@@ -314,11 +409,17 @@ namespace StandSupportTool
 
             if (!Directory.Exists(LuaPath))
             {
-                MessageBox.Show("Lua Script Directory doesn't exist", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "Lua Script Directory doesn't exist",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return new Dictionary<string, List<string>>();
             }
 
-            Dictionary<string, List<string>> directoryFiles = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> directoryFiles =
+                new Dictionary<string, List<string>>();
             Stack<string> directories = new Stack<string>();
             directories.Push(LuaPath);
 
@@ -341,7 +442,9 @@ namespace StandSupportTool
                         directoryFiles[relativeDir].Add(Path.GetFileName(relativeFilePath));
                     }
 
-                    string[] subDirectories = await Task.Run(() => Directory.GetDirectories(currentPath));
+                    string[] subDirectories = await Task.Run(
+                        () => Directory.GetDirectories(currentPath)
+                    );
                     foreach (string directory in subDirectories)
                     {
                         directories.Push(directory);
@@ -350,23 +453,44 @@ namespace StandSupportTool
             }
             catch (UnauthorizedAccessException ex)
             {
-                MessageBox.Show($"Access denied: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Access denied: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (PathTooLongException ex)
             {
-                MessageBox.Show($"Path too long: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Path too long: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (IOException ex)
             {
-                MessageBox.Show($"IO error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"IO error: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Unexpected error: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             return directoryFiles;
         }
+
         static StandMetaState GetMetaState()
         {
             string metaStatePath = Path.Combine(standDir, "Meta State.txt");
@@ -403,12 +527,22 @@ namespace StandSupportTool
                 }
                 else
                 {
-                    MessageBox.Show("Meta State file does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        "Meta State file does not exist.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read Meta State file, reason: {ex.Message}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to read Meta State file, reason: {ex.Message}.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             // Nothing was found in there, must be Default profile!
@@ -434,16 +568,27 @@ namespace StandSupportTool
                 }
                 else
                 {
-                    MessageBox.Show("Profile file does not exist", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(
+                        "Profile file does not exist",
+                        "Warning",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read Profile file, reason: {ex.Message}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to read Profile file, reason: {ex.Message}.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             return Array.Empty<string>();
         }
+
         static async Task<NetworkInfo> GetNetworkInfoAsync()
         {
             string url = "https://ipinfo.io/json";
@@ -468,40 +613,47 @@ namespace StandSupportTool
                             string asn = orgParts[0];
                             string provider = orgParts.Length > 1 ? orgParts[1] : string.Empty;
 
-                            return new NetworkInfo
-                            {
-                                ASN = asn,
-                                ISP = provider
-                            };
+                            return new NetworkInfo { ASN = asn, ISP = provider };
                         }
                     }
                 }
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show($"HTTP request error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"HTTP request error: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error connecting to stand.sh: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error connecting to stand.sh: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             // Return empty info
             return new NetworkInfo();
         }
+
         static List<string> GetXMLValue(XElement settings, string settingName)
         {
-            var settingElement =
-                settings.Elements("setting")
-                        .FirstOrDefault(e =>
-                        {
-                            var attributeName = e.Attribute("name");
-                            if (attributeName != null)
-                            {
-                                return attributeName.Value == settingName;
-                            }
-                            return false;
-                        });
+            var settingElement = settings
+                .Elements("setting")
+                .FirstOrDefault(e =>
+                {
+                    var attributeName = e.Attribute("name");
+                    if (attributeName != null)
+                    {
+                        return attributeName.Value == settingName;
+                    }
+                    return false;
+                });
 
             if (settingElement != null)
             {
@@ -511,7 +663,10 @@ namespace StandSupportTool
                     if (valueElement != null)
                     {
                         string attributeValue = valueElement.Value;
-                        string[] paths = attributeValue.Split('|', StringSplitOptions.RemoveEmptyEntries);
+                        string[] paths = attributeValue.Split(
+                            '|',
+                            StringSplitOptions.RemoveEmptyEntries
+                        );
                         return paths.Select(path => Path.GetFileName(path.Trim())).ToList();
                     }
                 }
@@ -549,26 +704,35 @@ namespace StandSupportTool
             {
                 return new LaunchpadData
                 {
-                    GameLauncher = GetXMLValue(settings, "GameLauncher").FirstOrDefault() ?? "Unknown",
-                    CustomDlls = GetXMLValue(settings, "CustomDll").ToArray()
+                    GameLauncher =
+                        GetXMLValue(settings, "GameLauncher").FirstOrDefault() ?? "Unknown",
+                    CustomDlls = GetXMLValue(settings, "CustomDll").ToArray(),
                 };
             }
 
             // Return empty data
             return new LaunchpadData();
         }
+
         static LaunchpadData GetLaunchpadProfile()
         {
-            string localAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string localAppDataPath = Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData
+            );
             string launchpadFolder = Path.Combine(localAppDataPath, "Calamity,_Inc");
 
             try
             {
                 if (Directory.Exists(launchpadFolder))
                 {
-                    var files = new DirectoryInfo(launchpadFolder).GetFiles("user.config", SearchOption.AllDirectories);
+                    var files = new DirectoryInfo(launchpadFolder).GetFiles(
+                        "user.config",
+                        SearchOption.AllDirectories
+                    );
 
-                    var lastModifiedFile = files.OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
+                    var lastModifiedFile = files
+                        .OrderByDescending(f => f.LastWriteTime)
+                        .FirstOrDefault();
 
                     if (lastModifiedFile != null)
                     {
@@ -577,7 +741,12 @@ namespace StandSupportTool
                     }
                     else
                     {
-                        MessageBox.Show("No user.config file found for Stand Launchpad.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show(
+                            "No user.config file found for Stand Launchpad.",
+                            "Warning",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning
+                        );
                     }
                 }
                 else
@@ -588,19 +757,27 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred when trying to get Launchpad Data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"An error occurred when trying to get Launchpad Data: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             // Return empty data
             return new LaunchpadData();
         }
+
         static string GetOSName()
         {
             string osName = "Unknown";
 
             try
             {
-                using ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
+                using ManagementObjectSearcher searcher = new ManagementObjectSearcher(
+                    "SELECT * FROM Win32_OperatingSystem"
+                );
                 foreach (ManagementObject os in searcher.Get())
                 {
                     osName = os["Caption"]?.ToString() ?? "Unknown OS";
@@ -614,6 +791,7 @@ namespace StandSupportTool
 
             return osName;
         }
+
         public static async Task DiagnosticsAsync()
         {
             StandInjectionResult lastInjection = ParseLastStandInjection();
@@ -635,13 +813,14 @@ namespace StandSupportTool
                 {
                     IsAbleToConnect = isAbleToConnect,
                     SHAValidationCheck = shaValidationCheck,
-                    isUpToDate = await isStandUpToDate()
+                    isUpToDate = await isStandUpToDate(),
                 };
             }
 
             environmentData.networkInfo = await GetNetworkInfoAsync();
             environmentData.OS_VERSION = GetOSName();
-            environmentData.isRunningInCompatibilityMode = compatibilityScanner.IsGameRunningInCompatibilityMode();
+            environmentData.isRunningInCompatibilityMode =
+                compatibilityScanner.IsGameRunningInCompatibilityMode();
             environmentData.antivirusInfo = antivirusInfo.GetAntivirusInfo();
 
             StandDumpData data = new StandDumpData
@@ -653,13 +832,13 @@ namespace StandSupportTool
                 Checks = standChecks,
                 EnvironmentData = environmentData,
                 installedLuaScripts = await GetInstalledLuaScripts(),
-                LaunchpadData = GetLaunchpadProfile()
+                LaunchpadData = GetLaunchpadProfile(),
             };
 
-            string jsonData = JsonSerializer.Serialize(data, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            string jsonData = JsonSerializer.Serialize(
+                data,
+                new JsonSerializerOptions { WriteIndented = true }
+            );
 
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string filePath = Path.Combine(desktopPath, $"stand_{data.ticketID}.json");
@@ -667,11 +846,21 @@ namespace StandSupportTool
             try
             {
                 await File.WriteAllTextAsync(filePath, jsonData);
-                MessageBox.Show($"A file named 'stand_{data.ticketID}.json' has been created on your Desktop.\nPlease send this file to the support chat for further assistance.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    $"A file named 'stand_{data.ticketID}.json' has been created on your Desktop.\nPlease send this file to the support chat for further assistance.",
+                    "Information",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error writing output data to file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error writing output data to file: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
     }

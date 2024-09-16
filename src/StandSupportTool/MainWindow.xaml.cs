@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Reflection;
 
 namespace StandSupportTool
 {
@@ -40,13 +40,23 @@ namespace StandSupportTool
             var window = new WindowInteropHelper(this).Handle;
             var attr = DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE;
             var useImmersiveDarkMode = true;
-            DwmSetWindowAttribute(window, attr, ref useImmersiveDarkMode, Marshal.SizeOf(typeof(bool)));
+            DwmSetWindowAttribute(
+                window,
+                attr,
+                ref useImmersiveDarkMode,
+                Marshal.SizeOf(typeof(bool))
+            );
         }
 
         private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
 
         [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = true)]
-        private static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attribute, ref bool pvAttribute, int cbAttribute);
+        private static extern int DwmSetWindowAttribute(
+            IntPtr hwnd,
+            DWMWINDOWATTRIBUTE attribute,
+            ref bool pvAttribute,
+            int cbAttribute
+        );
 
         public enum DWMWINDOWATTRIBUTE
         {
@@ -75,6 +85,7 @@ namespace StandSupportTool
                 }
             }
         }
+
         private string GetVersion()
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -141,7 +152,8 @@ namespace StandSupportTool
             }
         }
 
-        private void CopyLogToClipboard_Click(object sender, RoutedEventArgs e) => logManager.CopyLogToClipboard();
+        private void CopyLogToClipboard_Click(object sender, RoutedEventArgs e) =>
+            logManager.CopyLogToClipboard();
 
         private void CopyProfileToClipboard_Click(object sender, RoutedEventArgs e)
         {
@@ -152,7 +164,9 @@ namespace StandSupportTool
         {
             activationManager.SetActivationKey(this);
             // Updates the key back when the user saved it
-            ActivationKeyText.Text = activationManager.ReadActivationKey().Replace("Stand-Activate-", "");
+            ActivationKeyText.Text = activationManager
+                .ReadActivationKey()
+                .Replace("Stand-Activate-", "");
         }
 
         private void HotkeyButton_Click(object sender, RoutedEventArgs e)
@@ -162,20 +176,24 @@ namespace StandSupportTool
             hotkeysTable.ShowDialog();
         }
 
-        private void OpenYouTubeLink_Click(object sender, RoutedEventArgs e) => YouTubeLinkOpener.OpenYouTubeLink();
+        private void OpenYouTubeLink_Click(object sender, RoutedEventArgs e) =>
+            YouTubeLinkOpener.OpenYouTubeLink();
 
-        private void AddStandToExclusionsV2_Click(object sender, RoutedEventArgs e) => ExclusionManager.AddDefenderExclusion();
+        private void AddStandToExclusionsV2_Click(object sender, RoutedEventArgs e) =>
+            ExclusionManager.AddDefenderExclusion();
 
         private async void Launchpad_Click(object sender, RoutedEventArgs e)
         {
             AntivirusInfo avInfo = new AntivirusInfo();
 
-            if (avInfo.Is3rdPartyInstalled()) 
+            if (avInfo.Is3rdPartyInstalled())
             {
-                MessageBox.Show("Third-party antivirus software detected\nThis could cause issues when downloading the Launchpad.",
-                "3rd Party Antivirus Detected",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+                MessageBox.Show(
+                    "Third-party antivirus software detected\nThis could cause issues when downloading the Launchpad.",
+                    "3rd Party Antivirus Detected",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
             }
 
             await LaunchpadManager.PerformTest();
@@ -196,7 +214,12 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while trying to run Diagnostics: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"An error occurred while trying to run Diagnostics: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
     }

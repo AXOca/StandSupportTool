@@ -19,7 +19,12 @@ namespace StandSupportTool
 
             if (!activationKey.Contains(validPattern))
             {
-                MessageBox.Show("The key you are trying to use doesn't follow the correct pattern, it must contain \"Stand-Activate-\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "The key you are trying to use doesn't follow the correct pattern, it must contain \"Stand-Activate-\".",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return;
             }
 
@@ -29,7 +34,12 @@ namespace StandSupportTool
             // This will work as long as keys don't contain uppercase characters
             if (!keySuffix.All(c => char.IsLower(c) || char.IsDigit(c)))
             {
-                MessageBox.Show("This is not an activation key, it contains uppercase characters.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "This is not an activation key, it contains uppercase characters.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return;
             }
 

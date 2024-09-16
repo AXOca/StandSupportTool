@@ -17,7 +17,5 @@ namespace StandSupportTool.themes
     /// <summary>
     /// Interaction logic for Dark.xaml
     /// </summary>
-    public partial class Dark : Window
-    {
-    }
+    public partial class Dark : Window { }
 }

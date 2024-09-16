@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Text.Json;
 
 namespace StandSupportTool
 {
@@ -12,7 +12,8 @@ namespace StandSupportTool
     {
         private const string RepoOwner = "AXOca";
         private const string RepoName = "StandSupportTool";
-        private const string ApiUrl = $"https://api.github.com/repos/{RepoOwner}/{RepoName}/releases/latest";
+        private const string ApiUrl =
+            $"https://api.github.com/repos/{RepoOwner}/{RepoName}/releases/latest";
         private readonly string currentVersion;
         private readonly string executablePath;
 
@@ -21,30 +22,46 @@ namespace StandSupportTool
             this.currentVersion = currentVersion;
             this.executablePath = executablePath;
         }
+
         public async Task<bool> CheckForUpdates()
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; StandSupportToolClient/1.0)");
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                        "Mozilla/5.0 (compatible; StandSupportToolClient/1.0)"
+                    );
                     string json = await client.GetStringAsync(ApiUrl);
                     using JsonDocument doc = JsonDocument.Parse(json);
                     JsonElement root = doc.RootElement;
-                    if (root.TryGetProperty("tag_name", out JsonElement tagNameElement) && tagNameElement.GetString() is string latestVersion)
+                    if (
+                        root.TryGetProperty("tag_name", out JsonElement tagNameElement)
+                        && tagNameElement.GetString() is string latestVersion
+                    )
                     {
                         return CompareVersions(latestVersion.Trim(), currentVersion);
                     }
                     else
                     {
-                        MessageBox.Show("Failed to retrieve the latest version.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            "Failed to retrieve the latest version.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                         return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to check for updates: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to check for updates: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return false;
             }
         }
@@ -55,20 +72,34 @@ namespace StandSupportTool
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; StandSupportToolClient/1.0)");
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                        "Mozilla/5.0 (compatible; StandSupportToolClient/1.0)"
+                    );
                     string json = await client.GetStringAsync(ApiUrl);
                     using JsonDocument doc = JsonDocument.Parse(json);
                     JsonElement root = doc.RootElement;
-                    if (root.TryGetProperty("assets", out JsonElement assetsElement) && assetsElement[0].TryGetProperty("browser_download_url", out JsonElement downloadUrlElement) && downloadUrlElement.GetString() is string downloadUrl)
+                    if (
+                        root.TryGetProperty("assets", out JsonElement assetsElement)
+                        && assetsElement[0]
+                            .TryGetProperty(
+                                "browser_download_url",
+                                out JsonElement downloadUrlElement
+                            )
+                        && downloadUrlElement.GetString() is string downloadUrl
+                    )
                     {
                         byte[] data = await client.GetByteArrayAsync(downloadUrl);
-                        string tempFilePath = Path.Combine(Path.GetTempPath(), "StandSupportTool_new.exe");
+                        string tempFilePath = Path.Combine(
+                            Path.GetTempPath(),
+                            "StandSupportTool_new.exe"
+                        );
 
                         File.WriteAllBytes(tempFilePath, data);
 
                         string batchFilePath = Path.Combine(Path.GetTempPath(), "update.bat");
 
-                        string batchScript = $@"
+                        string batchScript =
+                            $@"
                             @echo off
                             taskkill /f /im {Path.GetFileName(executablePath)} > nul 2>&1
                             timeout /t 2 /nobreak > nul
@@ -90,15 +121,23 @@ namespace StandSupportTool
 
                         File.WriteAllText(batchFilePath, batchScript);
 
-                        ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe", $"/c \"{batchFilePath}\"")
+                        ProcessStartInfo processStartInfo = new ProcessStartInfo(
+                            "cmd.exe",
+                            $"/c \"{batchFilePath}\""
+                        )
                         {
                             CreateNoWindow = true,
-                            UseShellExecute = false
+                            UseShellExecute = false,
                         };
 
                         Process.Start(processStartInfo);
 
-                        MessageBox.Show($"Update downloaded to: {tempFilePath}", "Update Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(
+                            $"Update downloaded to: {tempFilePath}",
+                            "Update Info",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information
+                        );
 
                         LogUpdateProcess(tempFilePath, "Update process initiated.");
 
@@ -106,13 +145,23 @@ namespace StandSupportTool
                     }
                     else
                     {
-                        MessageBox.Show("Failed to retrieve the download URL.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            "Failed to retrieve the download URL.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to download update: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to download update: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 LogUpdateProcess(null, $"Error - {ex.Message}");
             }
         }
@@ -132,7 +181,10 @@ namespace StandSupportTool
                 logMessage += $" Temp file path: {tempFilePath}";
             }
 
-            File.AppendAllText(Path.Combine(Path.GetTempPath(), "update_log.txt"), logMessage + Environment.NewLine);
+            File.AppendAllText(
+                Path.Combine(Path.GetTempPath(), "update_log.txt"),
+                logMessage + Environment.NewLine
+            );
         }
     }
 }

@@ -11,7 +11,9 @@ namespace StandSupportTool
         public ActivationManager()
         {
             // Initialize the path to the activation key file
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appDataPath = Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData
+            );
             string standDir = Path.Combine(appDataPath, "Stand");
             activationKeyFilePath = Path.Combine(standDir, "Activation Key.txt");
         }
@@ -27,13 +29,23 @@ namespace StandSupportTool
                 }
                 else
                 {
-                    MessageBox.Show("Activation Key file does not exist.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        "Activation Key file does not exist.",
+                        "Info",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
                     return string.Empty;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read activation key: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to read activation key: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return string.Empty;
             }
         }
@@ -43,7 +55,10 @@ namespace StandSupportTool
         {
             try
             {
-                string standDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand");
+                string standDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Stand"
+                );
 
                 // Create directory if it doesn't exist
                 if (!Directory.Exists(standDir))
@@ -55,12 +70,22 @@ namespace StandSupportTool
                 File.WriteAllText(activationKeyFilePath, activationKey);
 
                 // Show success message
-                MessageBox.Show("Activation key saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    "Activation key saved successfully.",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
             }
             catch (Exception ex)
             {
                 // Show error message
-                MessageBox.Show($"Failed to write activation key: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to write activation key: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
 

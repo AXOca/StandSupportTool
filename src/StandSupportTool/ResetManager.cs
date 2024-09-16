@@ -10,9 +10,19 @@ namespace StandSupportTool
     internal class ResetManager
     {
         // Show a confirmation dialog and return true if the user clicks 'Yes'
-        private bool ShowConfirmation(string message, string caption, MessageBoxImage icon = MessageBoxImage.Question)
+        private bool ShowConfirmation(
+            string message,
+            string caption,
+            MessageBoxImage icon = MessageBoxImage.Question
+        )
         {
-            MessageBoxResult result = MessageBox.Show(message, caption, MessageBoxButton.YesNo, icon, MessageBoxResult.No);
+            MessageBoxResult result = MessageBox.Show(
+                message,
+                caption,
+                MessageBoxButton.YesNo,
+                icon,
+                MessageBoxResult.No
+            );
             return result == MessageBoxResult.Yes;
         }
 
@@ -20,11 +30,22 @@ namespace StandSupportTool
         public void FullReset()
         {
             // Initial prompt
-            if (!ShowConfirmation("Please close GTA V and Stand's Launchpad. Continue?", "Initial Prompt"))
+            if (
+                !ShowConfirmation(
+                    "Please close GTA V and Stand's Launchpad. Continue?",
+                    "Initial Prompt"
+                )
+            )
                 return;
 
             // Confirmation dialog
-            if (!ShowConfirmation("Are you sure you want to do that? All your outfits and individual settings will be lost.", "Confirmation Dialog", MessageBoxImage.Warning))
+            if (
+                !ShowConfirmation(
+                    "Are you sure you want to do that? All your outfits and individual settings will be lost.",
+                    "Confirmation Dialog",
+                    MessageBoxImage.Warning
+                )
+            )
                 return;
 
             // Backup choice
@@ -44,7 +65,10 @@ namespace StandSupportTool
         {
             try
             {
-                string standDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand");
+                string standDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Stand"
+                );
                 var itemsToBackup = SelectItemsToBackup(standDir);
 
                 if (itemsToBackup == null || !itemsToBackup.Any())
@@ -70,12 +94,22 @@ namespace StandSupportTool
                     }
                 }
 
-                MessageBox.Show("Backup completed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    "Backup completed successfully.",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to backup Stand data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to backup Stand data: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return false;
             }
         }
@@ -107,7 +141,7 @@ namespace StandSupportTool
                 Width = 400,
                 Height = 400,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ResizeMode = ResizeMode.CanResize
+                ResizeMode = ResizeMode.CanResize,
             };
 
             var grid = new Grid();
@@ -125,12 +159,20 @@ namespace StandSupportTool
             var listBox = new ListBox
             {
                 SelectionMode = SelectionMode.Multiple,
-                Margin = new Thickness(10)
+                Margin = new Thickness(10),
             };
             scrollViewer.Content = listBox;
 
-            var folders = Directory.GetDirectories(standDir).Select(Path.GetFileName).OrderBy(f => f).ToArray();
-            var files = Directory.GetFiles(standDir).Select(Path.GetFileName).OrderBy(f => f).ToArray();
+            var folders = Directory
+                .GetDirectories(standDir)
+                .Select(Path.GetFileName)
+                .OrderBy(f => f)
+                .ToArray();
+            var files = Directory
+                .GetFiles(standDir)
+                .Select(Path.GetFileName)
+                .OrderBy(f => f)
+                .ToArray();
 
             foreach (var folder in folders)
             {
@@ -146,7 +188,7 @@ namespace StandSupportTool
             {
                 Orientation = Orientation.Horizontal,
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(10)
+                Margin = new Thickness(10),
             };
             Grid.SetRow(buttonPanel, 1);
             grid.Children.Add(buttonPanel);
@@ -155,7 +197,7 @@ namespace StandSupportTool
             {
                 Content = "OK",
                 Width = 75,
-                Margin = new Thickness(5)
+                Margin = new Thickness(5),
             };
             okButton.Click += (sender, e) => dialog.DialogResult = true;
             buttonPanel.Children.Add(okButton);
@@ -164,7 +206,7 @@ namespace StandSupportTool
             {
                 Content = "Cancel",
                 Width = 75,
-                Margin = new Thickness(5)
+                Margin = new Thickness(5),
             };
             cancelButton.Click += (sender, e) => dialog.DialogResult = false;
             buttonPanel.Children.Add(cancelButton);
@@ -173,7 +215,7 @@ namespace StandSupportTool
             {
                 Content = "Backup All",
                 Width = 75,
-                Margin = new Thickness(5)
+                Margin = new Thickness(5),
             };
             backupAllButton.Click += (sender, e) =>
             {
@@ -186,8 +228,8 @@ namespace StandSupportTool
 
             if (dialog.DialogResult == true)
             {
-                return listBox.SelectedItems
-                    .Cast<string>()
+                return listBox
+                    .SelectedItems.Cast<string>()
                     .Select(item => item.Split(' ', 2)[1])
                     .ToArray();
             }
@@ -199,21 +241,39 @@ namespace StandSupportTool
         {
             try
             {
-                string standDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand");
+                string standDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Stand"
+                );
 
                 if (Directory.Exists(standDir))
                 {
                     Directory.Delete(standDir, true);
-                    MessageBox.Show("All Stand data has been deleted.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        "All Stand data has been deleted.",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
                 }
                 else
                 {
-                    MessageBox.Show("Stand directory does not exist.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        "Stand directory does not exist.",
+                        "Info",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to delete Stand data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to delete Stand data: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
     }

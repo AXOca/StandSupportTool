@@ -8,8 +8,8 @@ namespace StandSupportTool
 {
     public partial class AvChecker : BaseWindow
     {
-
         static AntivirusInfo antivirusInfo = new AntivirusInfo();
+
         public AvChecker()
         {
             InitializeComponent();
@@ -29,16 +29,26 @@ namespace StandSupportTool
                 // We must expand the EV since AVs like Defender have that in their PATH
                 string expandedPath = Environment.ExpandEnvironmentVariables(exePath);
 
-                if (expandedPath.Contains("MsMpeng.exe"))   // This is Michaelsoft Defender, we must run it differently!
+                if (expandedPath.Contains("MsMpeng.exe")) // This is Michaelsoft Defender, we must run it differently!
                 {
                     try
                     {
-                        Process.Start(new ProcessStartInfo("windowsdefender://threat") { UseShellExecute = true });
+                        Process.Start(
+                            new ProcessStartInfo("windowsdefender://threat")
+                            {
+                                UseShellExecute = true,
+                            }
+                        );
                         return;
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Failed to start Windows Defender: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            $"Failed to start Windows Defender: {ex.Message}",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                     }
                 }
 
@@ -49,7 +59,12 @@ namespace StandSupportTool
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to start process: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        $"Failed to start process: {ex.Message}",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                 }
             }
         }

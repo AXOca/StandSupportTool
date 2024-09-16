@@ -16,42 +16,58 @@ namespace StandSupportTool
             try
             {
                 // Annoying but avoids random AVs flagging the exe
-                string securityCenter64 = "XHJvb3RcU2VjdXJpdHlDZW50ZXIy";       // @"\root\SecurityCenter2"
-                string query64 = "U0VMRUNUICogRlJPTSBBbnRpdmlydXNQcm9kdWN0";    //  "SELECT * FROM AntivirusProduct"
+                string securityCenter64 = "XHJvb3RcU2VjdXJpdHlDZW50ZXIy"; // @"\root\SecurityCenter2"
+                string query64 = "U0VMRUNUICogRlJPTSBBbnRpdmlydXNQcm9kdWN0"; //  "SELECT * FROM AntivirusProduct"
 
-                string wmipathstr = @"\\" + Environment.MachineName + Base64.Decode(securityCenter64);
+                string wmipathstr =
+                    @"\\" + Environment.MachineName + Base64.Decode(securityCenter64);
                 string query = Base64.Decode(query64);
 
-                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmipathstr, query))
+                using (
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(
+                        wmipathstr,
+                        query
+                    )
+                )
                 using (ManagementObjectCollection instances = searcher.Get())
                 {
                     foreach (ManagementObject instance in instances)
                     {
                         string displayName = instance["displayName"]?.ToString() ?? "Unknown";
-                        string exePath = instance["pathToSignedReportingExe"]?.ToString() ?? "Unknown";
+                        string exePath =
+                            instance["pathToSignedReportingExe"]?.ToString() ?? "Unknown";
 
-                        antivirusInfos.Add(new AntivirusInfo
-                        {
-                            DisplayName = displayName,
-                            ExePath = exePath
-                        });
+                        antivirusInfos.Add(
+                            new AntivirusInfo { DisplayName = displayName, ExePath = exePath }
+                        );
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to gather antivirus information: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to gather antivirus information: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             return antivirusInfos;
         }
+
         public bool IsDefenderInstalled()
         {
             List<AntivirusInfo> antivirusInfos = GetAntivirusInfo();
             foreach (var antivirus in antivirusInfos)
             {
-                if (antivirus.DisplayName.Contains("Defender", StringComparison.OrdinalIgnoreCase) ||
-                    antivirus.DisplayName.Contains("Windows Defender", StringComparison.OrdinalIgnoreCase))
+                if (
+                    antivirus.DisplayName.Contains("Defender", StringComparison.OrdinalIgnoreCase)
+                    || antivirus.DisplayName.Contains(
+                        "Windows Defender",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
                 {
                     return true;
                 }
@@ -64,8 +80,13 @@ namespace StandSupportTool
             List<AntivirusInfo> antivirusInfos = GetAntivirusInfo();
             foreach (var antivirus in antivirusInfos)
             {
-                if (!antivirus.DisplayName.Contains("Defender", StringComparison.OrdinalIgnoreCase) &&
-                    !antivirus.DisplayName.Contains("Windows Defender", StringComparison.OrdinalIgnoreCase))
+                if (
+                    !antivirus.DisplayName.Contains("Defender", StringComparison.OrdinalIgnoreCase)
+                    && !antivirus.DisplayName.Contains(
+                        "Windows Defender",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
                 {
                     return true;
                 }

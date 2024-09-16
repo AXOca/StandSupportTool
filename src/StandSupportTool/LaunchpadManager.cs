@@ -9,10 +9,14 @@ namespace StandSupportTool
 {
     public static class LaunchpadManager
     {
-        private const string ZipUrl = "https://github.com/AXOca/StandSupportTool/raw/main/launchpad/launchpad.zip";
-        private const string ConfirmationMessage = "This feature will download Stand's Launchpad into a new folder on your desktop and exclude it automatically from Windows Defender.\n\nFor this, we need admin permissions.\n\nDo you want to continue?";
-        private const string SuccessMessage = "Done.\n\nLook at your Desktop, go into the \"Stand_Launchpad\" folder and unpack it.\n\nThe password is: stand.sh";
-        private const string ErrorMessage = "Operation cancelled or failed due to insufficient permissions.";
+        private const string ZipUrl =
+            "https://github.com/AXOca/StandSupportTool/raw/main/launchpad/launchpad.zip";
+        private const string ConfirmationMessage =
+            "This feature will download Stand's Launchpad into a new folder on your desktop and exclude it automatically from Windows Defender.\n\nFor this, we need admin permissions.\n\nDo you want to continue?";
+        private const string SuccessMessage =
+            "Done.\n\nLook at your Desktop, go into the \"Stand_Launchpad\" folder and unpack it.\n\nThe password is: stand.sh";
+        private const string ErrorMessage =
+            "Operation cancelled or failed due to insufficient permissions.";
 
         public static async Task PerformTest()
         {
@@ -36,7 +40,8 @@ namespace StandSupportTool
                 ConfirmationMessage,
                 "Confirmation",
                 MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+                MessageBoxImage.Question
+            );
 
             return result == MessageBoxResult.Yes;
         }
@@ -64,7 +69,7 @@ namespace StandSupportTool
                 Arguments = cmdArguments,
                 Verb = "runas",
                 UseShellExecute = true,
-                CreateNoWindow = true
+                CreateNoWindow = true,
             };
 
             try
@@ -93,7 +98,14 @@ namespace StandSupportTool
             {
                 var response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
-                await using (var fs = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                await using (
+                    var fs = new FileStream(
+                        destinationPath,
+                        FileMode.Create,
+                        FileAccess.Write,
+                        FileShare.None
+                    )
+                )
                 {
                     await response.Content.CopyToAsync(fs);
                 }
@@ -102,7 +114,12 @@ namespace StandSupportTool
 
         private static void InformUserOfSuccess()
         {
-            MessageBox.Show(SuccessMessage, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(
+                SuccessMessage,
+                "Success",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
     }
 }
