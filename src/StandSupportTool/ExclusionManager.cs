@@ -14,7 +14,12 @@ namespace StandSupportTool
 
             if (!antivirusInfo.IsDefenderInstalled())
             {
-                MessageBox.Show("Seems like Defender is not installed in your system, this is not supported.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "Seems like Defender is not installed in your system, this is not supported.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return;
             }
 
@@ -22,14 +27,17 @@ namespace StandSupportTool
                 "This feature will add an exclusion for Stand's BIN folder on Windows Defender.\n\nFor this, we need admin permissions.\n\nDo you want to continue?",
                 "Confirmation",
                 MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+                MessageBoxImage.Question
+            );
 
             if (result != MessageBoxResult.Yes)
             {
                 return;
             }
 
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appDataPath = Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData
+            );
             string exclusionPath = System.IO.Path.Combine(appDataPath, "Stand", "Bin");
 
             RestartAsAdmin($"--add-exclusion \"{exclusionPath}\"");
@@ -45,13 +53,13 @@ namespace StandSupportTool
         private static void RestartAsAdmin(string args = "")
         {
             string? exeName = Environment.ProcessPath;
-            if (exeName != null) 
+            if (exeName != null)
             {
                 var startInfo = new ProcessStartInfo(exeName)
                 {
                     UseShellExecute = true,
                     Verb = "runas",
-                    Arguments = args
+                    Arguments = args,
                 };
 
                 try
@@ -60,25 +68,41 @@ namespace StandSupportTool
                 }
                 catch (System.ComponentModel.Win32Exception)
                 {
-                    MessageBox.Show("This application requires administrator privileges to run. Please restart the application as an administrator.", "Administrator Privileges Required", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        "This application requires administrator privileges to run. Please restart the application as an administrator.",
+                        "Administrator Privileges Required",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                 }
             }
-
         }
+
         public void AddExclusion(string exclusionPath)
         {
             try
             {
                 if (IsExclusionAdded(exclusionPath))
                 {
-                    MessageBox.Show("Exclusion already exists.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        "Exclusion already exists.",
+                        "Info",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
                 }
                 else
                 {
-                    ManagementScope scope = new ManagementScope(@"\\.\root\Microsoft\Windows\Defender");
+                    ManagementScope scope = new ManagementScope(
+                        @"\\.\root\Microsoft\Windows\Defender"
+                    );
                     scope.Connect();
 
-                    ManagementClass instance = new ManagementClass(scope, new ManagementPath("MSFT_MpPreference"), null);
+                    ManagementClass instance = new ManagementClass(
+                        scope,
+                        new ManagementPath("MSFT_MpPreference"),
+                        null
+                    );
 
                     ManagementBaseObject inParams = instance.GetMethodParameters("Add");
                     inParams["ExclusionPath"] = new string[] { exclusionPath };
@@ -87,11 +111,21 @@ namespace StandSupportTool
 
                     if (IsExclusionAdded(exclusionPath))
                     {
-                        MessageBox.Show("Exclusion added.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(
+                            "Exclusion added.",
+                            "Success",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information
+                        );
                     }
                     else
                     {
-                        MessageBox.Show("Failed to verify exclusion.", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(
+                            "Failed to verify exclusion.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information
+                        );
                     }
 
                     Environment.Exit(0);
@@ -99,15 +133,30 @@ namespace StandSupportTool
             }
             catch (ManagementException mEx)
             {
-                MessageBox.Show($"WMI ManagementException: {mEx.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"WMI ManagementException: {mEx.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (UnauthorizedAccessException uEx)
             {
-                MessageBox.Show($"Unauthorized Access: {uEx.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Unauthorized Access: {uEx.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Unexpected error: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
 
             // We failed if we reach here
@@ -132,7 +181,13 @@ namespace StandSupportTool
                     {
                         foreach (string path in currentExclusions)
                         {
-                            if (string.Equals(path, exclusionPath, StringComparison.OrdinalIgnoreCase))
+                            if (
+                                string.Equals(
+                                    path,
+                                    exclusionPath,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
                             {
                                 return true;
                             }
@@ -142,7 +197,12 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Unexpected error when checking exclusion: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Unexpected error when checking exclusion: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             return false;
         }

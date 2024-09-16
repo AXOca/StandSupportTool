@@ -11,7 +11,11 @@ namespace StandSupportTool
         public LogManager()
         {
             // Initialize the path to the log file
-            logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand", "Log.txt");
+            logFilePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Stand",
+                "Log.txt"
+            );
         }
 
         // Display a window for the user to select log entries and copy to clipboard

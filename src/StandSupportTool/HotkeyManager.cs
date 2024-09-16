@@ -24,7 +24,7 @@ namespace StandSupportTool
             new Hotkey { KeyBinding = "L", Action = "Right" },
             new Hotkey { KeyBinding = "Enter", Action = "Click" },
             new Hotkey { KeyBinding = "Backspace", Action = "Back" },
-            new Hotkey { KeyBinding = "O, Numpad 3, H", Action = "Context Menu" }
+            new Hotkey { KeyBinding = "O, Numpad 3, H", Action = "Context Menu" },
         };
 
         public ObservableCollection<Hotkey> Hotkeys
@@ -41,7 +41,9 @@ namespace StandSupportTool
 
         public HotkeyManager()
         {
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appDataPath = Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData
+            );
             string standDir = Path.Combine(appDataPath, "Stand");
             hotkeysFilePath = Path.Combine(standDir, "Hotkeys.txt");
 
@@ -58,7 +60,6 @@ namespace StandSupportTool
                 }
             }
         }
-
 
         public List<Hotkey> Parse()
         {
@@ -80,11 +81,7 @@ namespace StandSupportTool
                         string actionName = parts[0].Trim();
                         string keyBinding = parts[1].Trim();
 
-                        hotkeys.Add(new Hotkey
-                        {
-                            Action = actionName,
-                            KeyBinding = keyBinding
-                        });
+                        hotkeys.Add(new Hotkey { Action = actionName, KeyBinding = keyBinding });
                     }
                 }
             }
@@ -99,7 +96,12 @@ namespace StandSupportTool
             {
                 if (Hotkeys.Any(h => h.KeyBinding == hotkey.KeyBinding))
                 {
-                    MessageBox.Show($"The key '{hotkey.KeyBinding}' is already used. Please replace it.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        $"The key '{hotkey.KeyBinding}' is already used. Please replace it.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                 }
                 else
                 {
@@ -108,10 +110,11 @@ namespace StandSupportTool
             }
             writeSmallerKeyboardHotkeysOnSave = true;
         }
+
         private string ReplaceLineWithPreservedIndentation(string originalLine, string newLine)
         {
             int tabCount = originalLine.Length - originalLine.TrimStart('\t').Length;
-            return new string('\t', tabCount) + newLine; 
+            return new string('\t', tabCount) + newLine;
         }
 
         public void SaveHotkeys()
@@ -153,7 +156,9 @@ namespace StandSupportTool
             if (writeSmallerKeyboardHotkeysOnSave)
             {
                 // Find or create the "Keyboard Input Scheme" section
-                int inputSchemeIndex = lines.FindIndex(line => line.Trim() == "Keyboard Input Scheme");
+                int inputSchemeIndex = lines.FindIndex(line =>
+                    line.Trim() == "Keyboard Input Scheme"
+                );
                 if (inputSchemeIndex == -1)
                 {
                     // If "Keyboard Input Scheme" section is not found, add it at the end
@@ -172,7 +177,10 @@ namespace StandSupportTool
                 // Add or update hotkeys under the "Context Menu" subsection
                 foreach (var hotkey in Hotkeys60)
                 {
-                    int hotkeyIndex = lines.FindIndex(inputSchemeIndex, line => line.Trim().StartsWith(hotkey.Action + ":"));
+                    int hotkeyIndex = lines.FindIndex(
+                        inputSchemeIndex,
+                        line => line.Trim().StartsWith(hotkey.Action + ":")
+                    );
 
                     if (hotkeyIndex != -1)
                     {

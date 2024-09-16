@@ -20,7 +20,10 @@ namespace StandSupportTool
         {
             try
             {
-                string standDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand");
+                string standDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Stand"
+                );
                 string stateFile = Path.Combine(standDir, "Meta State.txt");
 
                 if (File.Exists(stateFile))
@@ -41,7 +44,12 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read protocol: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to read protocol: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 choosenProtocol = "SMART"; // Fallback to default in case of an error
             }
         }
@@ -69,7 +77,12 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to focus unload: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to focus unload: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
 
@@ -78,12 +91,20 @@ namespace StandSupportTool
         {
             try
             {
-                string standDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Stand");
+                string standDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Stand"
+                );
                 string stateFile = Path.Combine(standDir, "Meta State.txt");
 
                 if (!Directory.Exists(standDir))
                 {
-                    MessageBox.Show("Stand folder doesn't exist, make sure to run Stand before changing protocol!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        "Stand folder doesn't exist, make sure to run Stand before changing protocol!",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                     return;
                 }
 
@@ -114,14 +135,24 @@ namespace StandSupportTool
                     }
                 }
 
-                MessageBox.Show("Protocol changed successfully.\nMake sure to Unload and reinject Stand!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    "Protocol changed successfully.\nMake sure to Unload and reinject Stand!",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
 
                 // Focuses Unload on Stand (Hopefully the user will press that damn button!)
                 focusUnload();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to write protocol: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to write protocol: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
     }

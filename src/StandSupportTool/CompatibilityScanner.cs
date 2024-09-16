@@ -8,8 +8,17 @@ namespace StandSupportTool
     internal class CompatibilityScanner
     {
         private string gameExe = "GTA5.exe";
-        private string registryPath = Base64.Decode("U29mdHdhcmVcTWljcm9zb2Z0XFdpbmRvd3MgTlRcQ3VycmVudFZlcnNpb25cQXBwQ29tcGF0RmxhZ3NcTGF5ZXJz"); // @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
-        private string[] compatibilityFlags = { "WIN8RTM", "WIN7RTM", "VISTASP2", "VISTASP1", "VISTARTM" };
+        private string registryPath = Base64.Decode(
+            "U29mdHdhcmVcTWljcm9zb2Z0XFdpbmRvd3MgTlRcQ3VycmVudFZlcnNpb25cQXBwQ29tcGF0RmxhZ3NcTGF5ZXJz"
+        ); // @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
+        private string[] compatibilityFlags =
+        {
+            "WIN8RTM",
+            "WIN7RTM",
+            "VISTASP2",
+            "VISTASP1",
+            "VISTARTM",
+        };
 
         public bool IsGameRunningInCompatibilityMode()
         {
@@ -39,13 +48,23 @@ namespace StandSupportTool
                     }
                     else
                     {
-                        MessageBox.Show("Failed to open registry key to get compatibility mode.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            "Failed to open registry key to get compatibility mode.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error
+                        );
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while checking compatibility mode: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"An error occurred while checking compatibility mode: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
             // Seems like nothing has been flagged
             return false;

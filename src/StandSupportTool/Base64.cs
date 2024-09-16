@@ -12,7 +12,10 @@ namespace StandSupportTool
         {
             if (string.IsNullOrEmpty(input))
             {
-                throw new ArgumentException("The input string cannot be null or empty.", nameof(input));
+                throw new ArgumentException(
+                    "The input string cannot be null or empty.",
+                    nameof(input)
+                );
             }
 
             try
@@ -22,7 +25,10 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("An error occurred during Base64 encoding.", ex);
+                throw new InvalidOperationException(
+                    "An error occurred during Base64 encoding.",
+                    ex
+                );
             }
         }
 
@@ -30,7 +36,10 @@ namespace StandSupportTool
         {
             if (string.IsNullOrEmpty(base64string))
             {
-                throw new ArgumentException("The input string cannot be null or empty.", nameof(base64string));
+                throw new ArgumentException(
+                    "The input string cannot be null or empty.",
+                    nameof(base64string)
+                );
             }
 
             try
@@ -44,7 +53,10 @@ namespace StandSupportTool
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("An error occurred during Base64 decoding.", ex);
+                throw new InvalidOperationException(
+                    "An error occurred during Base64 decoding.",
+                    ex
+                );
             }
         }
     }

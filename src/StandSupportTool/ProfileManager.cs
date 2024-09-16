@@ -12,7 +12,9 @@ namespace StandSupportTool
         public ProfileManager()
         {
             // Initialize paths
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appDataPath = Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData
+            );
             string standDir = Path.Combine(appDataPath, "Stand");
             metaStateFilePath = Path.Combine(standDir, "Meta State.txt");
             profilesDirectoryPath = Path.Combine(standDir, "Profiles");
@@ -35,12 +37,22 @@ namespace StandSupportTool
                     }
                 }
 
-                MessageBox.Show("Active profile not found.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    "Active profile not found.",
+                    "Info",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
                 return string.Empty;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to get active profile: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to get active profile: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return string.Empty;
             }
         }
@@ -58,13 +70,23 @@ namespace StandSupportTool
                 }
                 else
                 {
-                    MessageBox.Show($"Profile {profileName} not found.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        $"Profile {profileName} not found.",
+                        "Info",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
                     return string.Empty;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read profile: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to read profile: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return string.Empty;
             }
         }
@@ -78,12 +100,22 @@ namespace StandSupportTool
                 if (!string.IsNullOrEmpty(profileContent))
                 {
                     Clipboard.SetText(profileContent);
-                    MessageBox.Show($"Profile {profileName} copied to clipboard.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        $"Profile {profileName} copied to clipboard.",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to copy profile to clipboard: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to copy profile to clipboard: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
     }

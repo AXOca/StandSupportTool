@@ -29,7 +29,12 @@ namespace StandSupportTool
                 throw new InvalidOperationException("The window handle is not initialized.");
             }
 
-            int result = DwmSetWindowAttribute(windowHandle, attribute, ref useImmersiveDarkMode, Marshal.SizeOf(typeof(bool)));
+            int result = DwmSetWindowAttribute(
+                windowHandle,
+                attribute,
+                ref useImmersiveDarkMode,
+                Marshal.SizeOf(typeof(bool))
+            );
 
             if (result != 0)
             {
@@ -38,11 +43,16 @@ namespace StandSupportTool
         }
 
         [DllImport("dwmapi.dll", PreserveSig = true)]
-        private static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, ref bool pvAttribute, int cbAttribute);
+        private static extern int DwmSetWindowAttribute(
+            IntPtr hwnd,
+            DWMWINDOWATTRIBUTE dwAttribute,
+            ref bool pvAttribute,
+            int cbAttribute
+        );
 
         private enum DWMWINDOWATTRIBUTE
         {
-            DWMWA_USE_IMMERSIVE_DARK_MODE = 20
+            DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
         }
     }
 }

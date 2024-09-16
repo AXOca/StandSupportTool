@@ -13,11 +13,7 @@ namespace StandSupportTool
         {
             string url = "https://stand.sh/account/";
 
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
+            Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
         }
     }
 }

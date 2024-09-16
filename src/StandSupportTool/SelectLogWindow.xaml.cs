@@ -12,7 +12,8 @@ namespace StandSupportTool
     public partial class SelectLogWindow : BaseWindow
     {
         private readonly string logFilePath;
-        private readonly string standInjectionRegex = @"^.*Stand\s\d+(\.\d+)?\sreporting\sfor\sduty!$";
+        private readonly string standInjectionRegex =
+            @"^.*Stand\s\d+(\.\d+)?\sreporting\sfor\sduty!$";
         private List<string> allLogLines;
 
         public SelectLogWindow(string logFilePath)
@@ -31,7 +32,14 @@ namespace StandSupportTool
             {
                 if (File.Exists(logFilePath))
                 {
-                    using (FileStream fs = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (
+                        FileStream fs = new FileStream(
+                            logFilePath,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.ReadWrite
+                        )
+                    )
                     using (StreamReader sr = new StreamReader(fs))
                     {
                         string? line;
@@ -54,12 +62,22 @@ namespace StandSupportTool
                 }
                 else
                 {
-                    MessageBox.Show("Log file not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        "Log file not found.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read log file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Failed to read log file: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
             }
         }
 
@@ -70,11 +88,17 @@ namespace StandSupportTool
                     log,
                     System.Globalization.CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
-                    new Typeface(LogListBox.FontFamily, LogListBox.FontStyle, LogListBox.FontWeight, LogListBox.FontStretch),
+                    new Typeface(
+                        LogListBox.FontFamily,
+                        LogListBox.FontStyle,
+                        LogListBox.FontWeight,
+                        LogListBox.FontStretch
+                    ),
                     LogListBox.FontSize,
                     Brushes.White,
                     new NumberSubstitution(),
-                    1))
+                    1
+                ))
                 .ToList();
 
             // Gives padding on the side to fix the content
@@ -89,19 +113,36 @@ namespace StandSupportTool
             {
                 string logContent = GetLogEntriesAfterSelected(selectedEntry);
                 Clipboard.SetText(logContent);
-                MessageBox.Show("Selected log entries copied to clipboard.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    "Selected log entries copied to clipboard.",
+                    "Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
             }
             else
             {
-                var mostRecentEntry = MostRecentLogListBox.ItemsSource.Cast<string>().FirstOrDefault();
+                var mostRecentEntry = MostRecentLogListBox
+                    .ItemsSource.Cast<string>()
+                    .FirstOrDefault();
                 if (mostRecentEntry != null)
                 {
                     Clipboard.SetText(GetLogEntriesAfterSelected(mostRecentEntry));
-                    MessageBox.Show("Most recent log entry copied to clipboard.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        "Most recent log entry copied to clipboard.",
+                        "Success",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
                 }
                 else
                 {
-                    MessageBox.Show("No entry selected.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(
+                        "No entry selected.",
+                        "Warning",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
                 }
             }
         }
